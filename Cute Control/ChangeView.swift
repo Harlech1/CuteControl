@@ -119,8 +119,8 @@ struct ChangeView: View {
             selectedSymbol = preset.1
         } else {
             // Diğer durumlarda varsayılan değeri kullan
-            selectedColor = .red
-            selectedSymbol = "\(controlIndex).circle.fill"
+            selectedColor = .blue
+            selectedSymbol = "questionmark.app.fill"
         }
     }
 }

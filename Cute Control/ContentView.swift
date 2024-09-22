@@ -53,7 +53,7 @@ struct ContentView: View {
                                 .fill(Color.gray.opacity(0.15))
                                 .frame(width: 60, height: 60)
                                 .overlay(
-                                    Image(systemName: widgetConfigs[index]?.1 ?? "\(index).circle.fill")
+                                    Image(systemName: widgetConfigs[index]?.1 ?? "app.dashed")
                                         .foregroundColor(widgetConfigs[index]?.0 ?? .red)
                                         .font(.system(size: 24))
                                 )
@@ -111,7 +111,7 @@ struct ContentView: View {
             } else if index <= 5 {
                 configs[index] = presets[index - 1]
             } else {
-                configs[index] = (.red, "\(index).circle.fill")
+                configs[index] = (.blue, "questionmark.app.fill")
             }
         }
         return configs

@@ -20,8 +20,8 @@ struct ControlWidget1: ControlWidget {
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
-        .displayName("Control 1")
-        .description("Control Widget 1")
+        .displayName("Preset #1")
+        .description("Preset Control Widget #1")
     }
 }
 
@@ -36,8 +36,8 @@ struct ControlWidget2: ControlWidget {
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
-        .displayName("Control 2")
-        .description("Control Widget 2")
+        .displayName("Preset #2")
+        .description("Preset Control Widget #2")
     }
 }
 
@@ -52,8 +52,8 @@ struct ControlWidget3: ControlWidget {
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
-        .displayName("Control 3")
-        .description("Control Widget 3")
+        .displayName("Preset #3")
+        .description("Preset Control Widget #3")
     }
 }
 
@@ -68,8 +68,8 @@ struct ControlWidget4: ControlWidget {
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
-        .displayName("Control 4")
-        .description("Control Widget 4")
+        .displayName("Preset #4")
+        .description("Preset Control Widget #4")
     }
 }
 
@@ -84,8 +84,8 @@ struct ControlWidget5: ControlWidget {
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
-        .displayName("Control 5")
-        .description("Control Widget 5")
+        .displayName("Preset #5")
+        .description("Preset Control Widget #5")
     }
 }
 
@@ -100,8 +100,8 @@ struct ControlWidget6: ControlWidget {
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
-        .displayName("Control 6")
-        .description("Control Widget 6")
+        .displayName("Custom #1")
+        .description("Custom Control Widget #1")
     }
 }
 
@@ -116,8 +116,8 @@ struct ControlWidget7: ControlWidget {
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
-        .displayName("Control 7")
-        .description("Control Widget 7")
+        .displayName("Custom #2")
+        .description("Custom Control Widget #2")
     }
 }
 
@@ -132,8 +132,8 @@ struct ControlWidget8: ControlWidget {
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
-        .displayName("Control 8")
-        .description("Control Widget 8")
+        .displayName("Custom #3")
+        .description("Custom Control Widget #3")
     }
 }
 
@@ -148,8 +148,8 @@ struct ControlWidget9: ControlWidget {
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
-        .displayName("Control 9")
-        .description("Control Widget 9")
+        .displayName("Custom #4")
+        .description("Custom Control Widget #4")
     }
 }
 
@@ -164,8 +164,8 @@ struct ControlWidget10: ControlWidget {
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
-        .displayName("Control 10")
-        .description("Control Widget 10")
+        .displayName("Custom #5")
+        .description("Custom Control Widget #5")
     }
 }
 
@@ -180,8 +180,8 @@ struct ControlWidget11: ControlWidget {
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
-        .displayName("Control 11")
-        .description("Control Widget 11")
+        .displayName("Custom #6")
+        .description("Custom Control Widget #6")
     }
 }
 
@@ -196,8 +196,8 @@ struct ControlWidget12: ControlWidget {
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
-        .displayName("Control 12")
-        .description("Control Widget 12")
+        .displayName("Custom #7")
+        .description("Custom Control Widget #7")
     }
 }
 
@@ -212,8 +212,8 @@ struct ControlWidget13: ControlWidget {
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
-        .displayName("Control 13")
-        .description("Control Widget 13")
+        .displayName("Custom #8")
+        .description("Custom Control Widget #8")
     }
 }
 
@@ -228,8 +228,8 @@ struct ControlWidget14: ControlWidget {
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
-        .displayName("Control 14")
-        .description("Control Widget 14")
+        .displayName("Custom #9")
+        .description("Custom Control Widget #9")
     }
 }
 
@@ -244,8 +244,8 @@ struct ControlWidget15: ControlWidget {
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
-        .displayName("Control 15")
-        .description("Control Widget 15")
+        .displayName("Custom #10")
+        .description("Custom Control Widget #10")
     }
 }
 
@@ -260,8 +260,8 @@ struct ControlWidget16: ControlWidget {
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
-        .displayName("Control 16")
-        .description("Control Widget 16")
+        .displayName("Launcher #1")
+        .description("Launcher Control Widget #1")
     }
 }
 
@@ -276,8 +276,8 @@ struct ControlWidget17: ControlWidget {
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
-        .displayName("Control 17")
-        .description("Control Widget 17")
+        .displayName("Launcher #2")
+        .description("Launcher Control Widget #2")
     }
 }
 
@@ -292,8 +292,8 @@ struct ControlWidget18: ControlWidget {
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
-        .displayName("Control 18")
-        .description("Control Widget 18")
+        .displayName("Launcher #3")
+        .description("Launcher Control Widget #3")
     }
 }
 
@@ -308,8 +308,8 @@ struct ControlWidget19: ControlWidget {
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
-        .displayName("Control 19")
-        .description("Control Widget 19")
+        .displayName("Launcher #4")
+        .description("Launcher Control Widget #4")
     }
 }
 
@@ -324,8 +324,8 @@ struct ControlWidget20: ControlWidget {
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
-        .displayName("Control 20")
-        .description("Control Widget 20")
+        .displayName("Launcher #5")
+        .description("Launcher Control Widget #5")
     }
 }
 
