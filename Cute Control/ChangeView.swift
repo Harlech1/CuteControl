@@ -18,11 +18,20 @@ struct ChangeView: View {
     let controlIndex: Int
     let onConfigChange: (Color, String) -> Void
     @State private var selectedColor: Color = .red
-    @State private var selectedSymbol: String = "a.circle.fill"
+    @State private var selectedSymbol: String = "1.circle.fill"
     
     let letterSymbols = (97...122).map { String(UnicodeScalar($0)) + ".circle.fill" }
     let randomSymbols = ["star.fill", "heart.fill", "bell.fill", "cloud.fill", "bolt.fill", 
                          "sun.max.fill", "moon.fill", "cloud.sun.fill", "wind", "snowflake"]
+    
+    // Preset değerlerini tanımlayalım
+    let presets: [(Color, String)] = [
+        (.pink, "heart.fill"),
+        (.blue, "headphones"),
+        (.yellow, "star.fill"),
+        (.pink, "pawprint.fill"),
+        (.black, "guitars.fill")
+    ]
     
     var body: some View {
         VStack(spacing: 20) {
@@ -68,6 +77,7 @@ struct ChangeView: View {
         .padding()
         .navigationTitle("Widget Ayarları")
         .onChange(of: selectedColor) { _ in saveConfig() }
+        .onChange(of: selectedSymbol) { _ in saveConfig() }
         .onAppear { loadConfig() }
     }
     
@@ -77,7 +87,6 @@ struct ChangeView: View {
             .foregroundColor(symbol == selectedSymbol ? selectedColor : .gray)
             .onTapGesture {
                 selectedSymbol = symbol
-                saveConfig()
             }
     }
     
@@ -103,6 +112,15 @@ struct ChangeView: View {
            let config = try? JSONDecoder().decode(ControlConfig.self, from: configData) {
             selectedColor = Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3])
             selectedSymbol = config.symbolName
+        } else if controlIndex <= 5 {
+            // Eğer kaydedilmiş bir değer yoksa ve bu bir preset ise, preset değerini kullan
+            let preset = presets[controlIndex - 1]
+            selectedColor = preset.0
+            selectedSymbol = preset.1
+        } else {
+            // Diğer durumlarda varsayılan değeri kullan
+            selectedColor = .red
+            selectedSymbol = "\(controlIndex).circle.fill"
         }
     }
 }

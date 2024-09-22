@@ -10,7 +10,16 @@ import SwiftUI
 struct ContentView: View {
     @State private var widgetConfigs: [Int: (Color, String)] = [:]
     
+    let presets: [(Color, String)] = [
+        (.pink, "heart.fill"),
+        (.blue, "headphones"),
+        (.yellow, "star.fill"),
+        (.pink, "pawprint.fill"),
+        (.black, "guitars.fill")
+    ]
+    
     init() {
+        initializePresets()
         _widgetConfigs = State(initialValue: loadConfigs())
     }
     
@@ -71,12 +80,36 @@ struct ContentView: View {
         }
     }
     
+    private func initializePresets() {
+        let userDefaults = UserDefaults(suiteName: "group.com.turkerkizilcik.Cute-Control")
+        for (index, preset) in presets.enumerated() {
+            let key = "widgetConfig\(index + 1)"
+            if userDefaults?.object(forKey: key) == nil {
+                let uiColor = UIColor(preset.0)
+                var red: CGFloat = 0
+                var green: CGFloat = 0
+                var blue: CGFloat = 0
+                var alpha: CGFloat = 0
+                uiColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+                
+                let config = ControlConfig(color: [red, green, blue, alpha], symbolName: preset.1)
+                let configData = try? JSONEncoder().encode(config)
+                userDefaults?.set(configData, forKey: key)
+            }
+        }
+        userDefaults?.synchronize()
+    }
+
     func loadConfigs() -> [Int: (Color, String)] {
         var configs: [Int: (Color, String)] = [:]
+        let userDefaults = UserDefaults(suiteName: "group.com.turkerkizilcik.Cute-Control")
+        
         for index in 1...20 {
-            if let configData = UserDefaults(suiteName: "group.com.turkerkizilcik.Cute-Control")?.data(forKey: "widgetConfig\(index)"),
+            if let configData = userDefaults?.data(forKey: "widgetConfig\(index)"),
                let config = try? JSONDecoder().decode(ControlConfig.self, from: configData) {
                 configs[index] = (Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]), config.symbolName)
+            } else if index <= 5 {
+                configs[index] = presets[index - 1]
             } else {
                 configs[index] = (.red, "\(index).circle.fill")
             }
