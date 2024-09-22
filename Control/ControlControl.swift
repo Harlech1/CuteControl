@@ -338,15 +338,42 @@ struct ConfigProvider: ControlValueProvider {
     let index: Int
     
     func currentValue() async throws -> ControlConfig {
+        return loadConfig(for: index)
+    }
+    
+    var previewValue: ControlConfig {
+        return loadConfig(for: index)
+    }
+    
+    private func loadConfig(for index: Int) -> ControlConfig {
         if let configData = UserDefaults(suiteName: "group.com.turkerkizilcik.Cute-Control")?.data(forKey: "widgetConfig\(index)"),
            let config = try? JSONDecoder().decode(ControlConfig.self, from: configData) {
             return config
         }
-        return ControlConfig(color: [1, 0, 0, 1], symbolName: "\(index).circle.fill") // Varsayılan kırmızı renk ve numara ikonu
+        return getDefaultConfig(for: index)
     }
     
-    var previewValue: ControlConfig {
-        ControlConfig(color: [1, 0, 0, 1], symbolName: "\(index).circle.fill")
+    private func getDefaultConfig(for index: Int) -> ControlConfig {
+        let presets: [(Color, String)] = [
+            (.pink, "heart.fill"),
+            (.blue, "headphones"),
+            (.yellow, "star.fill"),
+            (.pink, "pawprint.fill"),
+            (.black, "guitars.fill")
+        ]
+        
+        if index <= 5 {
+            let preset = presets[index - 1]
+            let uiColor = UIColor(preset.0)
+            var red: CGFloat = 0
+            var green: CGFloat = 0
+            var blue: CGFloat = 0
+            var alpha: CGFloat = 0
+            uiColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+            return ControlConfig(color: [red, green, blue, alpha], symbolName: preset.1)
+        } else {
+            return ControlConfig(color: [1, 0, 0, 1], symbolName: "questionmark.app.fill")
+        }
     }
 }
 
@@ -357,6 +384,7 @@ struct Action_Q: SetValueIntent {
     var value: Bool
 
     func perform() async throws -> some IntentResult {
+        WidgetCenter.shared.reloadAllTimelines()
         return .result()
     }
 }

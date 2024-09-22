@@ -24,6 +24,7 @@ struct ChangeView: View {
     let randomSymbols = ["star.fill", "heart.fill", "bell.fill", "cloud.fill", "bolt.fill", 
                          "sun.max.fill", "moon.fill", "cloud.sun.fill", "wind", "snowflake"]
     
+    let quickColors: [Color] = [.red, .green, .blue, .yellow, .purple, .orange, .pink, .cyan, .mint, .indigo, .brown, .teal]
     // Preset değerlerini tanımlayalım
     let presets: [(Color, String)] = [
         (.pink, "heart.fill"),
@@ -34,51 +35,97 @@ struct ChangeView: View {
     ]
     
     var body: some View {
-        VStack(spacing: 20) {
-            Text("Control \(controlIndex) Ayarları")
-                .font(.headline)
-            
-            ColorPicker("Renk Seçin", selection: $selectedColor)
-            
-            Text("İkon Seçin")
-                .font(.headline)
-            
-            Group {
-                Text("Harfler")
-                    .font(.subheadline)
-                
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 50))], spacing: 10) {
-                    ForEach(letterSymbols, id: \.self) { symbol in
-                        iconButton(for: symbol)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("Color")
+                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                        .padding(.vertical, 5)
+                        .padding(.horizontal, 10)
+                        .background(.pink.opacity(0.15))
+                        .foregroundStyle(.pink)
+                        .cornerRadius(16)
+                    
+                    
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 10) {
+                            ColorPicker("", selection: $selectedColor)
+                                .labelsHidden()
+                            
+                            ForEach(quickColors, id: \.self) { color in
+                                Button(action: {
+                                    selectedColor = color
+                                }) {
+                                    Circle()
+                                        .fill(color)
+                                        .frame(width: 25, height: 25)
+                                        .overlay(
+                                            Circle()
+                                                .stroke(selectedColor == color ? Color.blue : Color.clear, lineWidth: 2)
+                                        )
+                                }
+                            }
+                        }
                     }
                 }
                 
-                Text("Diğer Semboller")
-                    .font(.subheadline)
-                    .padding(.top)
-                
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 50))], spacing: 10) {
-                    ForEach(randomSymbols, id: \.self) { symbol in
-                        iconButton(for: symbol)
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("Letters")
+                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                        .padding(.vertical, 5)
+                        .padding(.horizontal, 10)
+                        .background(.pink.opacity(0.15))
+                        .foregroundStyle(.pink)
+                        .cornerRadius(16)
+                    
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 50))], spacing: 10) {
+                        ForEach(letterSymbols, id: \.self) { symbol in
+                            iconButton(for: symbol)
+                        }
                     }
+                    .padding(.leading, -5)
+                    
+                    Text("Icons")
+                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                        .padding(.vertical, 5)
+                        .padding(.horizontal, 10)
+                        .background(.pink.opacity(0.15))
+                        .foregroundStyle(.pink)
+                        .cornerRadius(16)
+                    
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 50))], spacing: 10) {
+                        ForEach(randomSymbols, id: \.self) { symbol in
+                            iconButton(for: symbol)
+                        }
+                    }
+                    .padding(.leading, -5)
+
+                }
+                
+                Spacer()
+
+                HStack {
+                    Spacer()
+                    CustomSymbolView(symbolName: selectedSymbol, color: selectedColor, size: 100)
+                    Spacer()
                 }
             }
-            
-            Circle()
-                .fill(selectedColor)
-                .frame(width: 100, height: 100)
-                .overlay(
-                    Image(systemName: selectedSymbol)
-                        .foregroundColor(.white)
-                        .font(.system(size: 40))
-                )
-                .shadow(radius: 5)
+            .padding()
         }
-        .padding()
-        .navigationTitle("Widget Ayarları")
+        .navigationTitle(getTitle())
         .onChange(of: selectedColor) { _ in saveConfig() }
         .onChange(of: selectedSymbol) { _ in saveConfig() }
         .onAppear { loadConfig() }
+    }
+    
+    private func getTitle() -> String {
+        if controlIndex <= 5 {
+            return "Preset #\(controlIndex)"
+        } else if controlIndex <= 15 {
+            return "Custom #\(controlIndex - 5)"
+        } else {
+            return "Launcher #\(controlIndex - 15)"
+        }
     }
     
     private func iconButton(for symbol: String) -> some View {
@@ -122,5 +169,14 @@ struct ChangeView: View {
             selectedColor = .blue
             selectedSymbol = "questionmark.app.fill"
         }
+    }
+}
+
+#Preview {
+    NavigationView {
+        ChangeView(
+            controlIndex: 1,
+            onConfigChange: { _, _ in }
+        )
     }
 }

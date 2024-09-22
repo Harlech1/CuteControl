@@ -10,6 +10,8 @@
 		D1CCE4762C9F629A007C3C97 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1CCE4752C9F629A007C3C97 /* WidgetKit.framework */; };
 		D1CCE4782C9F629A007C3C97 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1CCE4772C9F629A007C3C97 /* SwiftUI.framework */; };
 		D1CCE4852C9F629C007C3C97 /* ControlExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D1CCE4732C9F629A007C3C97 /* ControlExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D1CCE49F2C9FDA45007C3C97 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = D1CCE49E2C9FDA45007C3C97 /* RevenueCat */; };
+		D1CCE4A12C9FDA45007C3C97 /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = D1CCE4A02C9FDA45007C3C97 /* RevenueCatUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +77,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D1CCE4A12C9FDA45007C3C97 /* RevenueCatUI in Frameworks */,
+				D1CCE49F2C9FDA45007C3C97 /* RevenueCat in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,6 +145,8 @@
 			);
 			name = "Cute Control";
 			packageProductDependencies = (
+				D1CCE49E2C9FDA45007C3C97 /* RevenueCat */,
+				D1CCE4A02C9FDA45007C3C97 /* RevenueCatUI */,
 			);
 			productName = "Cute Control";
 			productReference = D1CCE45E2C9F61AA007C3C97 /* Cute Control.app */;
@@ -195,6 +201,9 @@
 			);
 			mainGroup = D1CCE4552C9F61AA007C3C97;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				D1CCE49D2C9FDA45007C3C97 /* XCRemoteSwiftPackageReference "purchases-ios" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D1CCE45F2C9F61AA007C3C97 /* Products */;
 			projectDirPath = "";
@@ -515,6 +524,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D1CCE49D2C9FDA45007C3C97 /* XCRemoteSwiftPackageReference "purchases-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.3.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D1CCE49E2C9FDA45007C3C97 /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D1CCE49D2C9FDA45007C3C97 /* XCRemoteSwiftPackageReference "purchases-ios" */;
+			productName = RevenueCat;
+		};
+		D1CCE4A02C9FDA45007C3C97 /* RevenueCatUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D1CCE49D2C9FDA45007C3C97 /* XCRemoteSwiftPackageReference "purchases-ios" */;
+			productName = RevenueCatUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D1CCE4562C9F61AA007C3C97 /* Project object */;
 }

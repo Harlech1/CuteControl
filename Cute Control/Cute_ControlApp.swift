@@ -6,12 +6,21 @@
 //
 
 import SwiftUI
+import RevenueCat
+import RevenueCatUI
 
 @main
 struct Cute_ControlApp: App {
+
+    init() {
+        Purchases.logLevel = .debug
+        Purchases.configure(withAPIKey: "appl_YqjmYEYGLLJppbNWCEGwdhQBDji")
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()
+//                .presentPaywallIfNeeded(requiredEntitlementIdentifier: "premium")
         }
     }
 }

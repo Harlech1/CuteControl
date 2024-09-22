@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var widgetConfigs: [Int: (Color, String)] = [:]
-    
+
     let presets: [(Color, String)] = [
         (.pink, "heart.fill"),
         (.blue, "headphones"),
@@ -17,12 +17,12 @@ struct ContentView: View {
         (.pink, "pawprint.fill"),
         (.black, "guitars.fill")
     ]
-    
+
     init() {
         initializePresets()
         _widgetConfigs = State(initialValue: loadConfigs())
     }
-    
+
     var body: some View {
         NavigationView {
             ScrollView {
@@ -34,31 +34,32 @@ struct ContentView: View {
                 .padding()
             }
             .navigationTitle("Control Center")
+            .navigationBarTitleDisplayMode(.large)
         }
     }
-    
+
     private func sectionView(title: String, range: ClosedRange<Int>) -> some View {
         VStack(alignment: .leading) {
             Text(title)
-                .font(.headline)
-                .padding(.bottom, 5)
-            
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))], spacing: 20) {
+                .font(.system(size: 16, weight: .bold, design: .rounded))
+                .padding(.vertical, 5)
+                .padding(.horizontal, 10)
+                .background(.pink.opacity(0.15))
+                .foregroundStyle(.pink)
+                .cornerRadius(16)
+
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 60))], spacing: 20) {
                 ForEach(range, id: \.self) { index in
                     NavigationLink(destination: ChangeView(controlIndex: index, onConfigChange: { color, symbol in
                         widgetConfigs[index] = (color, symbol)
                     })) {
                         VStack {
-                            Circle()
-                                .fill(Color.gray.opacity(0.15))
-                                .frame(width: 60, height: 60)
-                                .overlay(
-                                    Image(systemName: widgetConfigs[index]?.1 ?? "app.dashed")
-                                        .foregroundColor(widgetConfigs[index]?.0 ?? .red)
-                                        .font(.system(size: 24))
-                                )
+                            CustomSymbolView(symbolName: widgetConfigs[index]?.1 ?? "app.dashed",
+                                             color: widgetConfigs[index]?.0 ?? .red,
+                                             size: 50)
                             Text(labelFor(index: index, in: title))
-                                .font(.caption)
+                                .font(.system(size: 10))
+                                .lineLimit(1)
                                 .foregroundColor(.secondary)
                         }
                     }
@@ -66,7 +67,7 @@ struct ContentView: View {
             }
         }
     }
-    
+
     private func labelFor(index: Int, in section: String) -> String {
         switch section {
         case "Preset":
@@ -79,7 +80,7 @@ struct ContentView: View {
             return ""
         }
     }
-    
+
     private func initializePresets() {
         let userDefaults = UserDefaults(suiteName: "group.com.turkerkizilcik.Cute-Control")
         for (index, preset) in presets.enumerated() {
@@ -91,7 +92,7 @@ struct ContentView: View {
                 var blue: CGFloat = 0
                 var alpha: CGFloat = 0
                 uiColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-                
+
                 let config = ControlConfig(color: [red, green, blue, alpha], symbolName: preset.1)
                 let configData = try? JSONEncoder().encode(config)
                 userDefaults?.set(configData, forKey: key)
@@ -103,7 +104,7 @@ struct ContentView: View {
     func loadConfigs() -> [Int: (Color, String)] {
         var configs: [Int: (Color, String)] = [:]
         let userDefaults = UserDefaults(suiteName: "group.com.turkerkizilcik.Cute-Control")
-        
+
         for index in 1...20 {
             if let configData = userDefaults?.data(forKey: "widgetConfig\(index)"),
                let config = try? JSONDecoder().decode(ControlConfig.self, from: configData) {
@@ -123,3 +124,41 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
+
+// Color extension'ı ekleyin
+extension Color {
+    init(hex: UInt, alpha: Double = 1) {
+        self.init(
+            .sRGB,
+            red: Double((hex >> 16) & 0xff) / 255,
+            green: Double((hex >> 08) & 0xff) / 255,
+            blue: Double((hex >> 00) & 0xff) / 255,
+            opacity: alpha
+        )
+    }
+}
+
+struct CustomSymbolView: View {
+    let symbolName: String
+    let color: Color
+    let size: CGFloat
+
+    var body: some View {
+        ZStack {
+            // Beyaz arka plan dairesi
+            Circle()
+                .fill(Color.gray.opacity(0.15))
+                .frame(width: size, height: size)
+
+            // Seçilen sembol (tam renkli)
+            Image(systemName: symbolName)
+                .resizable()
+                .scaledToFit()
+                .frame(width: size * 0.5, height: size * 0.5)
+                .foregroundStyle(color, color.opacity(0.2))
+        }
+        .frame(width: size, height: size)
+    }
+}
+
+
