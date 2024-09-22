@@ -18,12 +18,11 @@ struct ChangeView: View {
     let controlIndex: Int
     let onConfigChange: (Color, String) -> Void
     @State private var selectedColor: Color = .red
-    @State private var selectedSymbol: String = "1.circle.fill"
+    @State private var selectedSymbol: String = "a.circle.fill"
     
-    let symbols = ["l.circle.fill", "o.circle.fill", "v.circle.fill", "e.circle.fill", "heart.fill", 
-                   "sun.max.fill", "moon.fill", "cloud.sun.fill", "wind", "snowflake",
-                   "flame.fill", "drop.fill", "leaf.fill", "camera.fill", "message.fill",
-                   "phone.fill", "envelope.fill", "cart.fill", "gift.fill", "flag.fill"]
+    let letterSymbols = (97...122).map { String(UnicodeScalar($0)) + ".circle.fill" }
+    let randomSymbols = ["star.fill", "heart.fill", "bell.fill", "cloud.fill", "bolt.fill", 
+                         "sun.max.fill", "moon.fill", "cloud.sun.fill", "wind", "snowflake"]
     
     var body: some View {
         VStack(spacing: 20) {
@@ -33,16 +32,26 @@ struct ChangeView: View {
             ColorPicker("Renk Seçin", selection: $selectedColor)
             
             Text("İkon Seçin")
+                .font(.headline)
             
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 50))], spacing: 10) {
-                ForEach(symbols, id: \.self) { symbol in
-                    Image(systemName: symbol)
-                        .font(.system(size: 30))
-                        .foregroundColor(symbol == selectedSymbol ? selectedColor : .gray)
-                        .onTapGesture {
-                            selectedSymbol = symbol
-                            saveConfig()
-                        }
+            Group {
+                Text("Harfler")
+                    .font(.subheadline)
+                
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 50))], spacing: 10) {
+                    ForEach(letterSymbols, id: \.self) { symbol in
+                        iconButton(for: symbol)
+                    }
+                }
+                
+                Text("Diğer Semboller")
+                    .font(.subheadline)
+                    .padding(.top)
+                
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 50))], spacing: 10) {
+                    ForEach(randomSymbols, id: \.self) { symbol in
+                        iconButton(for: symbol)
+                    }
                 }
             }
             
@@ -60,6 +69,16 @@ struct ChangeView: View {
         .navigationTitle("Widget Ayarları")
         .onChange(of: selectedColor) { _ in saveConfig() }
         .onAppear { loadConfig() }
+    }
+    
+    private func iconButton(for symbol: String) -> some View {
+        Image(systemName: symbol)
+            .font(.system(size: 30))
+            .foregroundColor(symbol == selectedSymbol ? selectedColor : .gray)
+            .onTapGesture {
+                selectedSymbol = symbol
+                saveConfig()
+            }
     }
     
     private func saveConfig() {
