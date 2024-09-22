@@ -16,12 +16,16 @@ struct ControlWidget1: ControlWidget {
             provider: ConfigProvider(index: 1)
         ) { config in
             ControlWidgetToggle(isOn: true, action: Action_Q()) {
-                Image(systemName: config.symbolName)
+                Label {
+                    Text(config.description ?? "Preset #1")
+                } icon: {
+                    Image(systemName: config.symbolName)
+                }
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
         .displayName("Preset #1")
-        .description("Preset Control Widget #1")
+        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 1).previewValue.description ?? "Preset Control Widget #1"))
     }
 }
 
@@ -32,12 +36,16 @@ struct ControlWidget2: ControlWidget {
             provider: ConfigProvider(index: 2)
         ) { config in
             ControlWidgetToggle(isOn: true, action: Action_Q()) {
-                Image(systemName: config.symbolName)
+                Label {
+                    Text(config.description ?? "Preset #2")
+                } icon: {
+                    Image(systemName: config.symbolName)
+                }
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
         .displayName("Preset #2")
-        .description("Preset Control Widget #2")
+        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 2).previewValue.description ?? "Preset Control Widget #2"))
     }
 }
 
@@ -48,12 +56,16 @@ struct ControlWidget3: ControlWidget {
             provider: ConfigProvider(index: 3)
         ) { config in
             ControlWidgetToggle(isOn: true, action: Action_Q()) {
-                Image(systemName: config.symbolName)
+                Label {
+                    Text(config.description ?? "Preset #3")
+                } icon: {
+                    Image(systemName: config.symbolName)
+                }
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
         .displayName("Preset #3")
-        .description("Preset Control Widget #3")
+        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 3).previewValue.description ?? "Preset Control Widget #3"))
     }
 }
 
@@ -64,12 +76,16 @@ struct ControlWidget4: ControlWidget {
             provider: ConfigProvider(index: 4)
         ) { config in
             ControlWidgetToggle(isOn: true, action: Action_Q()) {
-                Image(systemName: config.symbolName)
+                Label {
+                    Text(config.description ?? "Preset #4")
+                } icon: {
+                    Image(systemName: config.symbolName)
+                }
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
         .displayName("Preset #4")
-        .description("Preset Control Widget #4")
+        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 4).previewValue.description ?? "Preset Control Widget #4"))
     }
 }
 
@@ -80,12 +96,16 @@ struct ControlWidget5: ControlWidget {
             provider: ConfigProvider(index: 5)
         ) { config in
             ControlWidgetToggle(isOn: true, action: Action_Q()) {
-                Image(systemName: config.symbolName)
+                Label {
+                    Text(config.description ?? "Preset #5")
+                } icon: {
+                    Image(systemName: config.symbolName)
+                }
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
         .displayName("Preset #5")
-        .description("Preset Control Widget #5")
+        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 5).previewValue.description ?? "Preset Control Widget #5"))
     }
 }
 
@@ -96,12 +116,16 @@ struct ControlWidget6: ControlWidget {
             provider: ConfigProvider(index: 6)
         ) { config in
             ControlWidgetToggle(isOn: true, action: Action_Q()) {
-                Image(systemName: config.symbolName)
+                Label {
+                    Text(config.description ?? "Custom #1")
+                } icon: {
+                    Image(systemName: config.symbolName)
+                }
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
         .displayName("Custom #1")
-        .description("Custom Control Widget #1")
+        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 6).previewValue.description ?? "Custom Control Widget #1"))
     }
 }
 
@@ -112,12 +136,16 @@ struct ControlWidget7: ControlWidget {
             provider: ConfigProvider(index: 7)
         ) { config in
             ControlWidgetToggle(isOn: true, action: Action_Q()) {
-                Image(systemName: config.symbolName)
+                Label {
+                    Text(config.description ?? "Custom #2")
+                } icon: {
+                    Image(systemName: config.symbolName)
+                }
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
         .displayName("Custom #2")
-        .description("Custom Control Widget #2")
+        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 7).previewValue.description ?? "Custom Control Widget #2"))
     }
 }
 
@@ -128,12 +156,16 @@ struct ControlWidget8: ControlWidget {
             provider: ConfigProvider(index: 8)
         ) { config in
             ControlWidgetToggle(isOn: true, action: Action_Q()) {
-                Image(systemName: config.symbolName)
+                Label {
+                    Text(config.description ?? "Custom #3")
+                } icon: {
+                    Image(systemName: config.symbolName)
+                }
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
         .displayName("Custom #3")
-        .description("Custom Control Widget #3")
+        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 8).previewValue.description ?? "Custom Control Widget #3"))
     }
 }
 
@@ -144,12 +176,16 @@ struct ControlWidget9: ControlWidget {
             provider: ConfigProvider(index: 9)
         ) { config in
             ControlWidgetToggle(isOn: true, action: Action_Q()) {
-                Image(systemName: config.symbolName)
+                Label {
+                    Text(config.description ?? "Custom #4")
+                } icon: {
+                    Image(systemName: config.symbolName)
+                }
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
         .displayName("Custom #4")
-        .description("Custom Control Widget #4")
+        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 9).previewValue.description ?? "Custom Control Widget #4"))
     }
 }
 
@@ -160,12 +196,16 @@ struct ControlWidget10: ControlWidget {
             provider: ConfigProvider(index: 10)
         ) { config in
             ControlWidgetToggle(isOn: true, action: Action_Q()) {
-                Image(systemName: config.symbolName)
+                Label {
+                    Text(config.description ?? "Custom #5")
+                } icon: {
+                    Image(systemName: config.symbolName)
+                }
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
         .displayName("Custom #5")
-        .description("Custom Control Widget #5")
+        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 10).previewValue.description ?? "Custom Control Widget #5"))
     }
 }
 
@@ -176,12 +216,16 @@ struct ControlWidget11: ControlWidget {
             provider: ConfigProvider(index: 11)
         ) { config in
             ControlWidgetToggle(isOn: true, action: Action_Q()) {
-                Image(systemName: config.symbolName)
+                Label {
+                    Text(config.description ?? "Custom #6")
+                } icon: {
+                    Image(systemName: config.symbolName)
+                }
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
         .displayName("Custom #6")
-        .description("Custom Control Widget #6")
+        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 11).previewValue.description ?? "Custom Control Widget #6"))
     }
 }
 
@@ -192,12 +236,16 @@ struct ControlWidget12: ControlWidget {
             provider: ConfigProvider(index: 12)
         ) { config in
             ControlWidgetToggle(isOn: true, action: Action_Q()) {
-                Image(systemName: config.symbolName)
+                Label {
+                    Text(config.description ?? "Custom #7")
+                } icon: {
+                    Image(systemName: config.symbolName)
+                }
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
         .displayName("Custom #7")
-        .description("Custom Control Widget #7")
+        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 12).previewValue.description ?? "Custom Control Widget #7"))
     }
 }
 
@@ -208,12 +256,16 @@ struct ControlWidget13: ControlWidget {
             provider: ConfigProvider(index: 13)
         ) { config in
             ControlWidgetToggle(isOn: true, action: Action_Q()) {
-                Image(systemName: config.symbolName)
+                Label {
+                    Text(config.description ?? "Custom #8")
+                } icon: {
+                    Image(systemName: config.symbolName)
+                }
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
         .displayName("Custom #8")
-        .description("Custom Control Widget #8")
+        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 13).previewValue.description ?? "Custom Control Widget #8"))
     }
 }
 
@@ -224,12 +276,16 @@ struct ControlWidget14: ControlWidget {
             provider: ConfigProvider(index: 14)
         ) { config in
             ControlWidgetToggle(isOn: true, action: Action_Q()) {
-                Image(systemName: config.symbolName)
+                Label {
+                    Text(config.description ?? "Custom #9")
+                } icon: {
+                    Image(systemName: config.symbolName)
+                }
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
         .displayName("Custom #9")
-        .description("Custom Control Widget #9")
+        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 14).previewValue.description ?? "Custom Control Widget #9"))
     }
 }
 
@@ -240,12 +296,16 @@ struct ControlWidget15: ControlWidget {
             provider: ConfigProvider(index: 15)
         ) { config in
             ControlWidgetToggle(isOn: true, action: Action_Q()) {
-                Image(systemName: config.symbolName)
+                Label {
+                    Text(config.description ?? "Custom #10")
+                } icon: {
+                    Image(systemName: config.symbolName)
+                }
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
         .displayName("Custom #10")
-        .description("Custom Control Widget #10")
+        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 15).previewValue.description ?? "Custom Control Widget #10"))
     }
 }
 
@@ -256,12 +316,16 @@ struct ControlWidget16: ControlWidget {
             provider: ConfigProvider(index: 16)
         ) { config in
             ControlWidgetToggle(isOn: true, action: Action_Q()) {
-                Image(systemName: config.symbolName)
+                Label {
+                    Text(config.description ?? "Launcher #1")
+                } icon: {
+                    Image(systemName: config.symbolName)
+                }
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
         .displayName("Launcher #1")
-        .description("Launcher Control Widget #1")
+        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 16).previewValue.description ?? "Launcher Control Widget #1"))
     }
 }
 
@@ -272,12 +336,16 @@ struct ControlWidget17: ControlWidget {
             provider: ConfigProvider(index: 17)
         ) { config in
             ControlWidgetToggle(isOn: true, action: Action_Q()) {
-                Image(systemName: config.symbolName)
+                Label {
+                    Text(config.description ?? "Launcher #2")
+                } icon: {
+                    Image(systemName: config.symbolName)
+                }
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
         .displayName("Launcher #2")
-        .description("Launcher Control Widget #2")
+        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 17).previewValue.description ?? "Launcher Control Widget #2"))
     }
 }
 
@@ -288,12 +356,16 @@ struct ControlWidget18: ControlWidget {
             provider: ConfigProvider(index: 18)
         ) { config in
             ControlWidgetToggle(isOn: true, action: Action_Q()) {
-                Image(systemName: config.symbolName)
+                Label {
+                    Text(config.description ?? "Launcher #3")
+                } icon: {
+                    Image(systemName: config.symbolName)
+                }
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
         .displayName("Launcher #3")
-        .description("Launcher Control Widget #3")
+        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 18).previewValue.description ?? "Launcher Control Widget #3"))
     }
 }
 
@@ -304,12 +376,16 @@ struct ControlWidget19: ControlWidget {
             provider: ConfigProvider(index: 19)
         ) { config in
             ControlWidgetToggle(isOn: true, action: Action_Q()) {
-                Image(systemName: config.symbolName)
+                Label {
+                    Text(config.description ?? "Launcher #4")
+                } icon: {
+                    Image(systemName: config.symbolName)
+                }
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
         .displayName("Launcher #4")
-        .description("Launcher Control Widget #4")
+        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 19).previewValue.description ?? "Launcher Control Widget #4"))
     }
 }
 
@@ -320,18 +396,23 @@ struct ControlWidget20: ControlWidget {
             provider: ConfigProvider(index: 20)
         ) { config in
             ControlWidgetToggle(isOn: true, action: Action_Q()) {
-                Image(systemName: config.symbolName)
+                Label {
+                    Text(config.description ?? "Launcher #5")
+                } icon: {
+                    Image(systemName: config.symbolName)
+                }
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
         .displayName("Launcher #5")
-        .description("Launcher Control Widget #5")
+        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 20).previewValue.description ?? "Launcher Control Widget #5"))
     }
 }
 
 struct ControlConfig: Codable {
     var color: [CGFloat]
     var symbolName: String
+    var description: String?  // Opsiyonel yaptık
 }
 
 struct ConfigProvider: ControlValueProvider {
@@ -354,12 +435,12 @@ struct ConfigProvider: ControlValueProvider {
     }
     
     private func getDefaultConfig(for index: Int) -> ControlConfig {
-        let presets: [(Color, String)] = [
-            (.pink, "heart.fill"),
-            (.blue, "headphones"),
-            (.yellow, "star.fill"),
-            (.pink, "pawprint.fill"),
-            (.black, "guitars.fill")
+        let presets: [(Color, String, String)] = [
+            (.pink, "heart.fill", "Preset #1"),
+            (.blue, "headphones", "Preset #2"),
+            (.yellow, "star.fill", "Preset #3"),
+            (.pink, "pawprint.fill", "Preset #4"),
+            (.black, "guitars.fill", "Preset #5")
         ]
         
         if index <= 5 {
@@ -370,9 +451,9 @@ struct ConfigProvider: ControlValueProvider {
             var blue: CGFloat = 0
             var alpha: CGFloat = 0
             uiColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-            return ControlConfig(color: [red, green, blue, alpha], symbolName: preset.1)
+            return ControlConfig(color: [red, green, blue, alpha], symbolName: preset.1, description: preset.2)
         } else {
-            return ControlConfig(color: [1, 0, 0, 1], symbolName: "questionmark.app.fill")
+            return ControlConfig(color: [1, 0, 0, 1], symbolName: "questionmark.app.fill", description: index <= 15 ? "Custom #\(index - 5)" : "Launcher #\(index - 15)")
         }
     }
 }

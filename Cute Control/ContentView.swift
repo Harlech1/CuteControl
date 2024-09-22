@@ -30,6 +30,8 @@ struct ContentView: View {
                     sectionView(title: "Preset", range: 1...5)
                     sectionView(title: "Custom", range: 6...15)
                     sectionView(title: "Launcher", range: 16...20)
+
+                    let _ = print("hi")
                 }
                 .padding()
             }
@@ -56,7 +58,7 @@ struct ContentView: View {
                         VStack {
                             CustomSymbolView(symbolName: widgetConfigs[index]?.1 ?? "app.dashed",
                                              color: widgetConfigs[index]?.0 ?? .red,
-                                             size: 50)
+                                             size: 50, fillColor: Color.gray.opacity(0.15))
                             Text(labelFor(index: index, in: title))
                                 .font(.system(size: 10))
                                 .lineLimit(1)
@@ -142,12 +144,13 @@ struct CustomSymbolView: View {
     let symbolName: String
     let color: Color
     let size: CGFloat
+    let fillColor: Color
 
     var body: some View {
         ZStack {
             // Beyaz arka plan dairesi
             Circle()
-                .fill(Color.gray.opacity(0.15))
+                .fill(fillColor)
                 .frame(width: size, height: size)
 
             // Seçilen sembol (tam renkli)
