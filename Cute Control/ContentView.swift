@@ -6,16 +6,20 @@
 //
 
 import SwiftUI
+import RevenueCat
+import RevenueCatUI
 
 struct ContentView: View {
     @State private var widgetConfigs: [Int: (Color, String)] = [:]
+    @EnvironmentObject var premiumManager: PremiumManager
+    @State private var showPremiumAlert = false
 
     let presets: [(Color, String)] = [
-        (.pink, "heart.fill"),
-        (.blue, "headphones"),
-        (.yellow, "star.fill"),
-        (.pink, "pawprint.fill"),
-        (.black, "guitars.fill")
+        (.pink, "l.circle.fill"),
+        (.pink, "o.circle.fill"),
+        (.pink, "v.circle.fill"),
+        (.pink, "e.circle.fill"),
+        (.pink, "heart.fill")
     ]
 
     init() {
@@ -29,7 +33,13 @@ struct ContentView: View {
                 VStack(alignment: .leading, spacing: 20) {
                     sectionView(title: "Preset", range: 1...5)
                     sectionView(title: "Custom", range: 6...15)
-                    sectionView(title: "Launcher", range: 16...20)
+                    sectionView(title: "Extra", range: 16...20)
+                        .disabled(!premiumManager.isPremium)
+                        .onTapGesture {
+                            if !premiumManager.isPremium {
+                                showPremiumAlert = true
+                            }
+                        }
 
                     let _ = print("hi")
                 }
@@ -37,6 +47,12 @@ struct ContentView: View {
             }
             .navigationTitle("Control Center")
             .navigationBarTitleDisplayMode(.large)
+            .onAppear {
+                premiumManager.checkPremiumStatus()
+            }
+            .fullScreenCover(isPresented: $showPremiumAlert){
+                PaywallView(displayCloseButton: true)
+            }
         }
     }
 
@@ -76,8 +92,8 @@ struct ContentView: View {
             return "Preset #\(index)"
         case "Custom":
             return "Custom #\(index - 5)"
-        case "Launcher":
-            return "Launcher #\(index - 15)"
+        case "Extra":
+            return "Extra #\(index - 15)"
         default:
             return ""
         }

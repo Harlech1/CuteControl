@@ -50,18 +50,15 @@ struct ChangeView: View {
     @State private var selectedSymbol: String = "1.circle.fill"
     @State private var controlDescription: String = ""
 
-    let letterSymbols = (97...122).map { String(UnicodeScalar($0)) + ".circle.fill" }
-    let randomSymbols = ["star.fill", "heart.fill", "bell.fill", "cloud.fill", "bolt.fill",
-                         "sun.max.fill", "moon.fill", "cloud.sun.fill", "wind", "snowflake"]
-
     let quickColors: [Color] = [.red, .green, .blue, .yellow, .purple, .orange, .pink, .cyan, .mint, .indigo, .brown, .teal]
     // Preset değerlerini tanımlayalım
+    
     let presets: [(Color, String)] = [
-        (.pink, "heart.fill"),
-        (.blue, "headphones"),
-        (.yellow, "star.fill"),
-        (.pink, "pawprint.fill"),
-        (.black, "guitars.fill")
+        (.pink, "l.circle.fill"),
+        (.pink, "o.circle.fill"),
+        (.pink, "v.circle.fill"),
+        (.pink, "e.circle.fill"),
+        (.pink, "heart.fill")
     ]
 
     var body: some View {
@@ -97,6 +94,21 @@ struct ChangeView: View {
                             }
                         }
                     }
+                }
+
+                VStack(alignment: .leading) {
+                    Text("Description")
+                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                        .padding(.vertical, 5)
+                        .padding(.horizontal, 10)
+                        .background(.pink.opacity(0.15))
+                        .foregroundStyle(.pink)
+                        .cornerRadius(16)
+                    TextField("Enter description", text: $controlDescription)
+                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                        .padding(.bottom, 5)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 5)
                 }
 
                 DisclosureGroup(
@@ -774,15 +786,6 @@ struct ChangeView: View {
                 .padding(.vertical, 5)
                 .accentColor(.pink)
 
-                // Description TextField
-                VStack(alignment: .leading) {
-                    Text("Description")
-                        .font(.headline)
-                    TextField("Enter description", text: $controlDescription)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .padding(.bottom)
-                }
-
                 Spacer(minLength: 110)
             }
             .padding()
@@ -814,7 +817,7 @@ struct ChangeView: View {
         } else if controlIndex <= 15 {
             return "Custom #\(controlIndex - 5)"
         } else {
-            return "Launcher #\(controlIndex - 15)"
+            return "Extra #\(controlIndex - 15)"
         }
     }
 
@@ -858,7 +861,7 @@ struct ChangeView: View {
         } else {
             selectedColor = .blue
             selectedSymbol = "questionmark.app.fill"
-            controlDescription = controlIndex <= 15 ? "Custom #\(controlIndex - 5)" : "Launcher #\(controlIndex - 15)"
+            controlDescription = controlIndex <= 15 ? "Custom #\(controlIndex - 5)" : "Extra #\(controlIndex - 15)"
         }
     }
 }

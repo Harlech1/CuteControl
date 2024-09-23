@@ -11,6 +11,7 @@ import RevenueCatUI
 
 @main
 struct Cute_ControlApp: App {
+    @StateObject var premiumManager = PremiumManager.shared
 
     init() {
         Purchases.logLevel = .debug
@@ -20,7 +21,8 @@ struct Cute_ControlApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-//                .presentPaywallIfNeeded(requiredEntitlementIdentifier: "premium")
+                .environmentObject(premiumManager)
+                .presentPaywallIfNeeded(requiredEntitlementIdentifier: "premium", presentationMode: .fullScreen)
         }
     }
 }

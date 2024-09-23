@@ -317,15 +317,15 @@ struct ControlWidget16: ControlWidget {
         ) { config in
             ControlWidgetToggle(isOn: true, action: Action_Q()) {
                 Label {
-                    Text(config.description ?? "Launcher #1")
+                    Text(config.description ?? "Extra #1")
                 } icon: {
                     Image(systemName: config.symbolName)
                 }
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
-        .displayName("Launcher #1")
-        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 16).previewValue.description ?? "Launcher Control Widget #1"))
+        .displayName("Extra #1")
+        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 16).previewValue.description ?? "Extra Control Widget #1"))
     }
 }
 
@@ -337,15 +337,15 @@ struct ControlWidget17: ControlWidget {
         ) { config in
             ControlWidgetToggle(isOn: true, action: Action_Q()) {
                 Label {
-                    Text(config.description ?? "Launcher #2")
+                    Text(config.description ?? "Extra #2")
                 } icon: {
                     Image(systemName: config.symbolName)
                 }
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
-        .displayName("Launcher #2")
-        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 17).previewValue.description ?? "Launcher Control Widget #2"))
+        .displayName("Extra #2")
+        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 17).previewValue.description ?? "Extra Control Widget #2"))
     }
 }
 
@@ -357,15 +357,15 @@ struct ControlWidget18: ControlWidget {
         ) { config in
             ControlWidgetToggle(isOn: true, action: Action_Q()) {
                 Label {
-                    Text(config.description ?? "Launcher #3")
+                    Text(config.description ?? "Extra #3")
                 } icon: {
                     Image(systemName: config.symbolName)
                 }
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
-        .displayName("Launcher #3")
-        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 18).previewValue.description ?? "Launcher Control Widget #3"))
+        .displayName("Extra #3")
+        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 18).previewValue.description ?? "Extra Control Widget #3"))
     }
 }
 
@@ -377,15 +377,15 @@ struct ControlWidget19: ControlWidget {
         ) { config in
             ControlWidgetToggle(isOn: true, action: Action_Q()) {
                 Label {
-                    Text(config.description ?? "Launcher #4")
+                    Text(config.description ?? "Extra #4")
                 } icon: {
                     Image(systemName: config.symbolName)
                 }
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
-        .displayName("Launcher #4")
-        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 19).previewValue.description ?? "Launcher Control Widget #4"))
+        .displayName("Extra #4")
+        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 19).previewValue.description ?? "Extra Control Widget #4"))
     }
 }
 
@@ -397,15 +397,15 @@ struct ControlWidget20: ControlWidget {
         ) { config in
             ControlWidgetToggle(isOn: true, action: Action_Q()) {
                 Label {
-                    Text(config.description ?? "Launcher #5")
+                    Text(config.description ?? "Extra #5")
                 } icon: {
                     Image(systemName: config.symbolName)
                 }
             }
             .tint(Color(.sRGB, red: config.color[0], green: config.color[1], blue: config.color[2], opacity: config.color[3]))
         }
-        .displayName("Launcher #5")
-        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 20).previewValue.description ?? "Launcher Control Widget #5"))
+        .displayName("Extra #5")
+        .description(LocalizedStringResource(stringLiteral: ConfigProvider(index: 20).previewValue.description ?? "Extra Control Widget #5"))
     }
 }
 
@@ -436,11 +436,11 @@ struct ConfigProvider: ControlValueProvider {
     
     private func getDefaultConfig(for index: Int) -> ControlConfig {
         let presets: [(Color, String, String)] = [
-            (.pink, "heart.fill", "Preset #1"),
-            (.blue, "headphones", "Preset #2"),
-            (.yellow, "star.fill", "Preset #3"),
-            (.pink, "pawprint.fill", "Preset #4"),
-            (.black, "guitars.fill", "Preset #5")
+            (.pink, "l.circle.fill", "Preset #1"),
+            (.pink, "o.circle.fill", "Preset #2"),
+            (.pink, "v.circle.fill", "Preset #3"),
+            (.pink, "e.circle.fill", "Preset #4"),
+            (.pink, "heart.fill", "Preset #5")
         ]
         
         if index <= 5 {
@@ -453,7 +453,7 @@ struct ConfigProvider: ControlValueProvider {
             uiColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
             return ControlConfig(color: [red, green, blue, alpha], symbolName: preset.1, description: preset.2)
         } else {
-            return ControlConfig(color: [1, 0, 0, 1], symbolName: "questionmark.app.fill", description: index <= 15 ? "Custom #\(index - 5)" : "Launcher #\(index - 15)")
+            return ControlConfig(color: [1, 0, 0, 1], symbolName: "questionmark.app.fill", description: index <= 15 ? "Custom #\(index - 5)" : "Extra #\(index - 15)")
         }
     }
 }
