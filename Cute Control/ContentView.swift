@@ -28,7 +28,7 @@ struct ContentView: View {
     }
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     sectionView(title: "Preset", range: 1...5)
@@ -52,6 +52,14 @@ struct ContentView: View {
             }
             .fullScreenCover(isPresented: $showPremiumAlert){
                 PaywallView(displayCloseButton: true)
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink(destination: SettingsView()) {
+                        Image(systemName: "gearshape.fill")
+                            .foregroundColor(.pink)
+                    }
+                }
             }
         }
     }
