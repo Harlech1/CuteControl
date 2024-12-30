@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D14B1BE92CB4038C00EB22AC /* SharedManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14B1BE82CB4038C00EB22AC /* SharedManager.swift */; };
+		D14B1BEA2CB4038C00EB22AC /* SharedManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14B1BE82CB4038C00EB22AC /* SharedManager.swift */; };
 		D1CCE4762C9F629A007C3C97 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1CCE4752C9F629A007C3C97 /* WidgetKit.framework */; };
 		D1CCE4782C9F629A007C3C97 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1CCE4772C9F629A007C3C97 /* SwiftUI.framework */; };
 		D1CCE4852C9F629C007C3C97 /* ControlExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D1CCE4732C9F629A007C3C97 /* ControlExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -39,6 +41,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D14B1BE82CB4038C00EB22AC /* SharedManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedManager.swift; sourceTree = "<group>"; };
 		D1CCE45E2C9F61AA007C3C97 /* Cute Control.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Cute Control.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1CCE4732C9F629A007C3C97 /* ControlExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ControlExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1CCE4752C9F629A007C3C97 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -97,6 +100,7 @@
 		D1CCE4552C9F61AA007C3C97 = {
 			isa = PBXGroup;
 			children = (
+				D14B1BE82CB4038C00EB22AC /* SharedManager.swift */,
 				D1CCE48C2C9F7858007C3C97 /* ControlExtension.entitlements */,
 				D1CCE4602C9F61AA007C3C97 /* Cute Control */,
 				D1CCE4792C9F629A007C3C97 /* Control */,
@@ -237,6 +241,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D14B1BEA2CB4038C00EB22AC /* SharedManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -244,6 +249,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D14B1BE92CB4038C00EB22AC /* SharedManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -382,9 +388,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "Cute Control/Cute Control.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Cute Control/Resources/Cute Control.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Cute Control/Preview Content\"";
 				DEVELOPMENT_TEAM = 8NLR5UAY6K;
 				ENABLE_PREVIEWS = YES;
@@ -400,7 +406,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.turkerkizilcik.Cute-Control";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -414,9 +420,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "Cute Control/Cute Control.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Cute Control/Resources/Cute Control.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Cute Control/Preview Content\"";
 				DEVELOPMENT_TEAM = 8NLR5UAY6K;
 				ENABLE_PREVIEWS = YES;
@@ -432,7 +438,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.turkerkizilcik.Cute-Control";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

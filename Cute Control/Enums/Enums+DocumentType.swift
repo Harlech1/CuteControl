@@ -1,17 +1,9 @@
 //
-//  Enums.swift
+//  Enums+DocumentType.swift
 //  Cute Control
 //
 //  Created by Türker Kızılcık on 24.09.2024.
 //
-
-import Foundation
-
-enum AlertType {
-    case subscriber
-    case selectBook
-    case goDocuments
-}
 
 enum DocumentType {
     case privacyPolicy

@@ -61,7 +61,14 @@ struct SettingsView: View {
                     }
 
                     Button(action: {
-                        restorePurchases()
+                        Task {
+                            let isPremium = await premiumManager.restorePurchases()
+                            DispatchQueue.main.async {
+                                if isPremium {
+                                    showAlert = true
+                                }
+                            }
+                        }
                     }) {
                         Label(
                             title: { Text("Restore Purchases") },
@@ -107,22 +114,17 @@ struct SettingsView: View {
                             icon: { Image(systemName: "doc.fill") }
                         ).labelStyle(.colorful(.gray))
                     }.foregroundColor(.primary)
-                }.onAppear {
-                    premiumManager.checkPremiumStatus()
+                }
+                .onAppear {
+                    Task {
+                        await premiumManager.checkPremiumStatus()
+                    }
                 }
                 .navigationTitle("Settings")
                 .navigationBarTitleDisplayMode(.large)
                 .alert(isPresented: $showAlert) {
                     Alert(title: Text("❤️"), message: Text("You are already a subscriber."), dismissButton: .default(Text("OK")))
                 }
-            }
-        }
-    }
-
-    func restorePurchases() {
-        Purchases.shared.restorePurchases { customerInfo, error in
-            if customerInfo?.entitlements["Pro"]?.isActive == true {
-                showAlert = true
             }
         }
     }

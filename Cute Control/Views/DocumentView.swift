@@ -16,7 +16,6 @@ struct DocumentsView: View {
             ZStack {
                 Text(documentType.text)
             }
-
         }
         .navigationTitle(documentType == .privacyPolicy ? "Privacy Policy" : "Terms of Use")
         .navigationBarTitleDisplayMode(.inline)

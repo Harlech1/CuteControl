@@ -5,7 +5,6 @@
 //  Created by Türker Kızılcık on 24.09.2024.
 //
 
-import Foundation
 import SwiftUI
 
 struct ColorfulIconLabelStyle: LabelStyle {
