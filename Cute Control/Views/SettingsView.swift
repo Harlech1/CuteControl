@@ -1,151 +1,168 @@
 //
 //  SettingsView.swift
-//  Cute Control
+//  Song-X
 //
-//  Created by Türker Kızılcık on 24.09.2024.
+//  Created by Türker Kızılcık on 23.10.2024.
 //
 
 import SwiftUI
 import RevenueCat
+import TPackage
 import RevenueCatUI
 
 struct SettingsView: View {
-    @EnvironmentObject var premiumManager: PremiumManager
-    @State private var showPaywall = false
-    @State var isPremium = false
     @State private var showAlert = false
+    @State private var showPaywall = false
+    @State private var showGuide = false
+    @State var isPremium = false
+    @State private var isRestoring = false
+    @EnvironmentObject var premiumManager: TKPremiumManager
+    @StateObject private var ratingManager = RatingManager.shared
+    @State private var showRestoreAlert = false
+    @State private var restoreMessage = ""
+    @Environment(\.dismiss) var dismiss
+    @StateObject private var feedbackManager = FeedbackManager.shared
 
     var body: some View {
         NavigationStack {
             Form {
-                Section(header: Text("Subscriptions").font(.subheadline)) {
-                    if premiumManager.isPremium {
-                        Text("Subscription is active. Thanks for being a premium user. ♥️").foregroundStyle(.gray)
-                    } else {
-                        Text("Your subscription isn't actived.").foregroundStyle(.gray)
-                    }
-
-                    Button(action: {
-                        if !premiumManager.isPremium {
-                            showPaywall = true
-                        } else {
-                            showAlert = true
-                        }
-                    }) {
-                        Label(
-                            title: { Text("Go Premium")
-                                    .foregroundColor(.clear)
-                                    .overlay(
-                                        LinearGradient(
-                                            gradient: Gradient(colors: [
-                                                Color(red: 248/255, green: 171/255, blue: 94/255),
-                                                Color(red: 243/255, green: 105/255, blue: 97/255),
-                                                Color(red: 161/255, green: 118/255, blue: 200/255),
-                                                Color(red: 117/255, green: 155/255, blue: 235/255),
-                                                Color(red: 101/255, green: 190/255, blue: 179/255),
-                                                Color(red: 112/255, green: 219/255, blue: 150/255),
-                                            ]),
-                                            startPoint: .leading,
-                                            endPoint: .trailing
-                                        )
-                                        .mask(
-                                            Text("Go Premium")
-                                        )
-                                    ) },
-                            icon: { Image(systemName: "crown.fill")}
-                        ).labelStyle(.colorful(.red))
-                    }
-                    .foregroundColor(.primary)
-                    .fullScreenCover(isPresented: $showPaywall){
-                        PaywallView(displayCloseButton: true)
-                    }
-
+                Section {
                     Button(action: {
                         Task {
-                            let isPremium = await premiumManager.restorePurchases()
-                            DispatchQueue.main.async {
-                                if isPremium {
-                                    showAlert = true
-                                }
+                            await premiumManager.checkPremiumStatus()
+                            if !premiumManager.isPremium {
+                                showPaywall = true
+                            } else {
+                                showAlert = true
                             }
                         }
                     }) {
-                        Label(
-                            title: { Text("Restore Purchases") },
-                            icon: { Image(systemName: "arrow.clockwise") }
-                        ).labelStyle(.colorful(.teal))
-                    }.foregroundColor(.primary)
-                }
-
-                Section(header: Text("Help us grow").font(.subheadline)) {
-                    Button(action: {
-                        openAppStoreForRating()
-                    }) {
-                        Label(
-                            title: { Text("Rate Us") },
-                            icon: { Image(systemName: "star.fill") }
-                        )
-                        .labelStyle(.colorful(.orange))
-                    }.foregroundColor(.primary)
-
-                    Button(action: {
-                        sendEmail(to: "developerturker@gmail.com", subject: "Feedback on Cute Control", body: "Hello, I'd like to provide some feedback...")
-                    }) {
-                        Label(
-                            title: { Text("Feedback") },
-                            icon: { Image(systemName: "envelope.fill")
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(premiumManager.isPremium ? "Cute Control Premium Activated" : "Cute Control Premium")
+                                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                                    .foregroundColor(.white)
+                                Text(premiumManager.isPremium ? "Thank you for your support! ♥️" : "Unlock all amazing features")
+                                    .font(.system(size: 16, weight: .medium, design: .rounded))
+                                    .foregroundColor(.white.opacity(0.8))
                             }
-                        ).labelStyle(.colorful(.blue))
+                            Spacer()
+                            if !premiumManager.isPremium {
+                                Text("Try Now")
+                                    .font(.system(size: 16, weight: .semibold, design: .rounded))
+                                    .foregroundColor(.pink)
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 6)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 15)
+                                            .fill(Color.white))
+                            }
+                        }
+                    }
+                    .listRowBackground(Color.pink)
+                }
 
+                Section(header: Text("Subscriptions")) {
+                    TKSettingsView(items: [.init(icon: "arrow.clockwise",
+                                                iconColor: .white,
+                                                iconBackgroundColor: .teal,
+                                                title: "Restore Purchases",
+                                                action: {
+                        isRestoring = true
+                        Task {
+                            do {
+                                try await Purchases.shared.restorePurchases()
+                                await premiumManager.checkPremiumStatus()
+                                if premiumManager.isPremium {
+                                    await ratingManager.requestReview()
+                                    restoreMessage = "You are already a subscriber ❤️"
+                                } else {
+                                    restoreMessage = "No previous purchases found."
+                                }
+                            } catch {
+                                restoreMessage = "Failed to restore purchases. Please try again."
+                            }
+                            isRestoring = false
+                            showRestoreAlert = true
+                        }
+                    })])
+                }
+
+                Section(header: Text("Help Us To Grow")) {
+                    TKSettingsView(items:
+                                    [.init(icon: "square.and.arrow.up.fill",
+                                           iconColor: .white,
+                                           iconBackgroundColor: .red,
+                                           title: "Share App",
+                                           action: {
+                        TKSettingsView.shareAppLink(appUrl: "https://apps.apple.com/us/app/widgets-cute-control-themes/id6708228449")
+                    }), .init(icon: "star.fill", iconColor: .white, iconBackgroundColor: .orange, title: "Rate Us", action: {
+                        TKSettingsView.openAppStoreForRating(appId: "6708228449")
+                    }), .init(icon: "envelope.fill", iconColor: .white, iconBackgroundColor: .blue, title: "Feedback", action: {
+                        TKSettingsView.sendEmail(to: "developerturker1@gmail.com", subject: "Feedback on Cute Control", body: "Hello, I'd like to share some feedback about...")
+                    })])
+
+                    Button {
+                        feedbackManager.showingFeedback = true
+                    } label: {
+                        Label(
+                            title: { Text("Fast Feedback") },
+                            icon: { Image(systemName: "paperplane.fill")
+                                    .scaledToFit()
+                                .frame(width: 20, height: 20)}
+                        ).labelStyle(.colorful(.purple))
                     }.foregroundColor(.primary)
                 }
 
-                Section(header: Text("Documents").font(.subheadline)) {
-                    NavigationLink(destination: DocumentsView(documentType: .privacyPolicy)){
+                Section(header: Text("Documents")) {
+                    NavigationLink(destination: TKDocumentsView(type: .privacyPolicy, appName: "Cute Control", developerName: "Türker Kızılcık", email: "developerturker1@gmail.com")){
                         Label(
                             title: { Text("Privacy Policy") },
                             icon: { Image(systemName: "doc.fill") }
-                        ).labelStyle(.colorful(.gray))
+                        ).labelStyle(.colorful(.black))
                     }.foregroundColor(.primary)
 
-                    NavigationLink(destination: DocumentsView(documentType: .termsOfUse)){
+                    NavigationLink(destination: TKDocumentsView(type: .termsOfUse, appName: "Cute Control", developerName: "Türker Kızılcık", email: "developerturker1@gmail.com")){
                         Label(
                             title: { Text("Terms of Use") },
                             icon: { Image(systemName: "doc.fill") }
-                        ).labelStyle(.colorful(.gray))
+                        ).labelStyle(.colorful(.black))
                     }.foregroundColor(.primary)
                 }
-                .onAppear {
-                    Task {
-                        await premiumManager.checkPremiumStatus()
-                    }
-                }
-                .navigationTitle("Settings")
-                .navigationBarTitleDisplayMode(.large)
-                .alert(isPresented: $showAlert) {
-                    Alert(title: Text("❤️"), message: Text("You are already a subscriber."), dismissButton: .default(Text("OK")))
+            }
+            .onAppear {
+                Task {
+                    await premiumManager.checkPremiumStatus()
                 }
             }
-        }
-    }
-
-    func openAppStoreForRating() {
-        if let url = URL(string: "itms-apps://itunes.apple.com/app/id6708228449/?action=write-review") {
-            UIApplication.shared.open(url)
-        }
-    }
-
-    func sendEmail(to: String, subject: String, body: String) {
-        let email = "mailto:\(to)?subject=\(subject)&body=\(body)"
-        if let url = URL(string: email.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "") {
-            if UIApplication.shared.canOpenURL(url) {
-                UIApplication.shared.open(url)
+            .navigationTitle("Settings")
+            .navigationBarTitleDisplayMode(.large)
+            .alert(isPresented: $showAlert) {
+                Alert(title: Text("❤️"), message: Text("You are already a subscriber."), dismissButton: .default(Text("OK")))
+            }
+            .alert("Restore Purchases", isPresented: $showRestoreAlert) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text(restoreMessage)
+            }
+            .alert("saved! a little feedback? 🎀", isPresented: $feedbackManager.showingFeedback) {
+                TextField("tell us what you think...", text: $feedbackManager.feedbackText)
+                Button("Send") {
+                    feedbackManager.sendFeedback(wasCanceled: false, source: "SettingsView/Cute Control")
+                }
+                Button("Cancel", role: .cancel) {
+                    feedbackManager.sendFeedback(wasCanceled: true, source: "SettingsView/Cute Control")
+                }
+            } message: {
+                Text("what's one thing we could improve?")
+            }
+            .fullScreenCover(isPresented: $showPaywall) {
+                CustomPaywallView()
             }
         }
     }
 }
 
-//#Preview {
-//    SettingsView()
-//        .environmentObject(premiumManager)
-//}
+#Preview {
+    SettingsView()
+}

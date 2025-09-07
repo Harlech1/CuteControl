@@ -8,10 +8,11 @@
 import SwiftUI
 import RevenueCatUI
 import WidgetKit
+import TPackage
 
 struct ControlCenterView: View {
     @StateObject private var viewModel = WidgetConfigViewModel()
-    @EnvironmentObject var premiumManager: PremiumManager
+    @EnvironmentObject var premiumManager: TKPremiumManager
     @State private var showPaywall = false
 
     var body: some View {
@@ -29,13 +30,10 @@ struct ControlCenterView: View {
             .onAppear {
                 Task {
                     await premiumManager.checkPremiumStatus()
-                    if !premiumManager.isPremium {
-//                        showPaywall = true
-                    }
                 }
             }
             .fullScreenCover(isPresented: $showPaywall) {
-                PaywallView(displayCloseButton: true) // false olacak
+                CustomPaywallView()
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {

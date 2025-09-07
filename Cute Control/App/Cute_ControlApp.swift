@@ -7,13 +7,14 @@
 
 import SwiftUI
 import RevenueCat
+import TPackage
 
 @main
 struct Cute_ControlApp: App {
-    @StateObject private var premiumManager = PremiumManager.shared
+    @StateObject var premiumManager = TKPremiumManager.shared
 
     init() {
-        configureRevenueCat()
+        TPackage.configure(withAPIKey: "appl_YqjmYEYGLLJppbNWCEGwdhQBDji", entitlementIdentifier: "premium")
     }
 
     var body: some Scene {
@@ -21,10 +22,5 @@ struct Cute_ControlApp: App {
             ControlCenterView()
                 .environmentObject(premiumManager)
         }
-    }
-
-    private func configureRevenueCat() {
-        Purchases.logLevel = .debug
-        Purchases.configure(withAPIKey: "appl_YqjmYEYGLLJppbNWCEGwdhQBDji")
     }
 }

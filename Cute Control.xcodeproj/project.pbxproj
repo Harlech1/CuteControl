@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D10742DA2E6DB5CF008EC76F /* TPackage in Frameworks */ = {isa = PBXBuildFile; productRef = D10742D92E6DB5CF008EC76F /* TPackage */; };
 		D14B1BE92CB4038C00EB22AC /* SharedManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14B1BE82CB4038C00EB22AC /* SharedManager.swift */; };
 		D14B1BEA2CB4038C00EB22AC /* SharedManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14B1BE82CB4038C00EB22AC /* SharedManager.swift */; };
 		D1CCE4762C9F629A007C3C97 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1CCE4752C9F629A007C3C97 /* WidgetKit.framework */; };
@@ -82,6 +83,7 @@
 			files = (
 				D1CCE4A12C9FDA45007C3C97 /* RevenueCatUI in Frameworks */,
 				D1CCE49F2C9FDA45007C3C97 /* RevenueCat in Frameworks */,
+				D10742DA2E6DB5CF008EC76F /* TPackage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -151,6 +153,7 @@
 			packageProductDependencies = (
 				D1CCE49E2C9FDA45007C3C97 /* RevenueCat */,
 				D1CCE4A02C9FDA45007C3C97 /* RevenueCatUI */,
+				D10742D92E6DB5CF008EC76F /* TPackage */,
 			);
 			productName = "Cute Control";
 			productReference = D1CCE45E2C9F61AA007C3C97 /* Cute Control.app */;
@@ -207,6 +210,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				D1CCE49D2C9FDA45007C3C97 /* XCRemoteSwiftPackageReference "purchases-ios" */,
+				D10742D82E6DB5CF008EC76F /* XCRemoteSwiftPackageReference "TPackage" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D1CCE45F2C9F61AA007C3C97 /* Products */;
@@ -536,6 +540,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		D10742D82E6DB5CF008EC76F /* XCRemoteSwiftPackageReference "TPackage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Harlech1/TPackage.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		D1CCE49D2C9FDA45007C3C97 /* XCRemoteSwiftPackageReference "purchases-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RevenueCat/purchases-ios.git";
@@ -547,6 +559,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		D10742D92E6DB5CF008EC76F /* TPackage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D10742D82E6DB5CF008EC76F /* XCRemoteSwiftPackageReference "TPackage" */;
+			productName = TPackage;
+		};
 		D1CCE49E2C9FDA45007C3C97 /* RevenueCat */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D1CCE49D2C9FDA45007C3C97 /* XCRemoteSwiftPackageReference "purchases-ios" */;
