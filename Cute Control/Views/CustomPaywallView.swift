@@ -24,7 +24,7 @@ struct CustomPaywallView: View {
     @State private var isMovingRight: Bool = true
     @State private var speedMultiplier: Double = 1.0
     @State private var sparkleBoost: Int = 0
-    private let hardPaywall: Bool = false
+    private let hardPaywall: Bool = true
     @State private var isWeeklySelected = true
     @State private var packages: [Package] = []
     @State private var selectedPackage: Package?

@@ -30,6 +30,9 @@ struct ControlCenterView: View {
             .onAppear {
                 Task {
                     await premiumManager.checkPremiumStatus()
+                    if !premiumManager.isPremium {
+                        showPaywall = true
+                    }
                 }
             }
             .fullScreenCover(isPresented: $showPaywall) {
