@@ -14,6 +14,7 @@ struct ControlCenterView: View {
     @StateObject private var viewModel = WidgetConfigViewModel()
     @EnvironmentObject var premiumManager: TKPremiumManager
     @State private var showPaywall = false
+    @State private var hasCheckedPaywall = false
 
     var body: some View {
         NavigationStack {
@@ -28,10 +29,13 @@ struct ControlCenterView: View {
             .navigationTitle("Control Center")
             .navigationBarTitleDisplayMode(.large)
             .onAppear {
-                Task {
-                    await premiumManager.checkPremiumStatus()
-                    if !premiumManager.isPremium {
-                        showPaywall = true
+                if !hasCheckedPaywall {
+                    Task {
+                        await premiumManager.checkPremiumStatus()
+                        if !premiumManager.isPremium {
+                            showPaywall = true
+                        }
+                        hasCheckedPaywall = true
                     }
                 }
             }
@@ -64,15 +68,32 @@ struct ControlCenterView: View {
 
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 60))], spacing: 20) {
                 ForEach(range, id: \.self) { index in
-                    NavigationLink(destination: ChangeView(viewModel: viewModel, controlIndex: index)) {
-                        VStack {
-                            WidgetPreviewView(symbolName: viewModel.widgetConfigs[index]?.1 ?? "app.dashed",
-                                               color: viewModel.widgetConfigs[index]?.0 ?? .red,
-                                               size: 50, fillColor: Color.gray.opacity(0.15))
-                            Text(viewModel.labelFor(index: index, in: title))
-                                .font(.system(size: 10))
-                                .lineLimit(1)
-                                .foregroundColor(.secondary)
+                    if title == "Extra" && !premiumManager.isPremium {
+                        Button(action: {
+                            showPaywall = true
+                        }) {
+                            VStack {
+                                WidgetPreviewView(symbolName: viewModel.widgetConfigs[index]?.1 ?? "app.dashed",
+                                                   color: viewModel.widgetConfigs[index]?.0 ?? .red,
+                                                   size: 50, fillColor: Color.gray.opacity(0.15))
+                                Text(viewModel.labelFor(index: index, in: title))
+                                    .font(.system(size: 10))
+                                    .lineLimit(1)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                    } else {
+                        NavigationLink(destination: ChangeView(viewModel: viewModel, controlIndex: index)) {
+                            VStack {
+                                WidgetPreviewView(symbolName: viewModel.widgetConfigs[index]?.1 ?? "app.dashed",
+                                                   color: viewModel.widgetConfigs[index]?.0 ?? .red,
+                                                   size: 50, fillColor: Color.gray.opacity(0.15))
+                                Text(viewModel.labelFor(index: index, in: title))
+                                    .font(.system(size: 10))
+                                    .lineLimit(1)
+                                    .foregroundColor(.secondary)
+                            }
                         }
                     }
                 }
