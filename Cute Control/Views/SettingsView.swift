@@ -1,6 +1,6 @@
 //
 //  SettingsView.swift
-//  Song-X
+//  Cute Control
 //
 //  Created by Türker Kızılcık on 23.10.2024.
 //
@@ -22,6 +22,7 @@ struct SettingsView: View {
     @State private var restoreMessage = ""
     @Environment(\.dismiss) var dismiss
     @StateObject private var feedbackManager = FeedbackManager.shared
+    @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
 
     var body: some View {
         NavigationStack {
@@ -129,6 +130,16 @@ struct SettingsView: View {
                         ).labelStyle(.colorful(.black))
                     }.foregroundColor(.primary)
                 }
+
+                #if DEBUG
+                Section(header: Text("Debug")) {
+                    Button(role: .destructive) {
+                        hasSeenOnboarding = false
+                    } label: {
+                        Label("Reset Onboarding", systemImage: "arrow.counterclockwise")
+                    }
+                }
+                #endif
             }
             .onAppear {
                 Task {

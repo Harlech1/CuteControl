@@ -37,7 +37,7 @@ class FeedbackManager: ObservableObject {
         Task {
             do {
                 let customerInfo = try await Purchases.shared.customerInfo()
-                let isPremium = customerInfo.entitlements.all["Premium"]?.isActive == true
+                let isPremium = customerInfo.entitlements.all["premium"]?.isActive == true
                 let originalAppUserId = customerInfo.originalAppUserId
                 let firstSeen = customerInfo.firstSeen
                 let latestExpirationDate = customerInfo.latestExpirationDate

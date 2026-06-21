@@ -19,11 +19,20 @@ struct WidgetPreviewView: View {
                 .fill(fillColor)
                 .frame(width: size, height: size)
 
-            Image(systemName: symbolName)
-                .resizable()
-                .scaledToFit()
-                .frame(width: size * 0.5, height: size * 0.5)
-                .foregroundStyle(color, color.opacity(0.2))
+            if symbolName.isSFSymbol {
+                Image(systemName: symbolName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: size * 0.5, height: size * 0.5)
+                    .foregroundStyle(color, color.opacity(0.2))
+            } else {
+                Text(symbolName)
+                    .font(.system(size: size * 0.24))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.3)
+                    .foregroundStyle(color)
+                    .frame(width: size * 0.86)
+            }
         }
         .frame(width: size, height: size)
     }

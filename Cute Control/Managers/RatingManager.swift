@@ -1,5 +1,6 @@
 import SwiftUI
 import StoreKit
+import UIKit
 
 @MainActor
 final class RatingManager: ObservableObject {
@@ -25,6 +26,8 @@ final class RatingManager: ObservableObject {
     }
     
     func requestReview() async {
-        await SKStoreReviewController.requestReview()
+        guard let scene = UIApplication.shared.connectedScenes
+            .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene else { return }
+        AppStore.requestReview(in: scene)
     }
 }

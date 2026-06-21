@@ -4,327 +4,249 @@ import RevenueCatUI
 import SafariServices
 import TPackage
 
-struct SparkleEffect: Identifiable {
-    let id = UUID()
-    var x: CGFloat
-    var y: CGFloat
-    var opacity: Double = 1.0
-    var scale: CGFloat = 1.0
+private extension Color {
+    static let paywallAccent = Color(red: 0.97, green: 0.40, blue: 0.66)
+    static let paywallAccentDeep = Color(red: 0.87, green: 0.20, blue: 0.52)
 }
 
 struct CustomPaywallView: View {
     @Environment(\.dismiss) private var dismiss
-    
+
     @State private var showDismissButton = false
     @State private var progress: CGFloat = 0
-    @State private var rotation: Double = 0
-    @State private var waveTime: Double = 0
-    @State private var sparkles: [SparkleEffect] = []
-    @State private var lastX: CGFloat = 0
-    @State private var isMovingRight: Bool = true
-    @State private var speedMultiplier: Double = 1.0
-    @State private var sparkleBoost: Int = 0
     private let hardPaywall: Bool = false
-    @State private var isWeeklySelected = true
+
     @State private var packages: [Package] = []
     @State private var selectedPackage: Package?
-    @State private var showingPrivacy = false
-    @State private var showingTerms = false
-    @State private var yearlyStrikethroughPrice: String = ""
-    @State private var isTrialEligible: Bool = false
-    
-    #if DEBUG
-    private let forceShowTrial = true
-    #else
-    private let forceShowTrial = false
-    #endif
+    @State private var isLoading = true
     @State private var showingAlert = false
     @State private var alertTitle = ""
     @State private var alertMessage = ""
-    @State private var isLoading = true
+    @State private var dismissOnAlertOK = false
+    @State private var showingPrivacy = false
+    @State private var showingTerms = false
+    @State private var purchaseSucceeded = false
+
     @EnvironmentObject var premiumManager: TKPremiumManager
     @StateObject private var ratingManager = RatingManager.shared
 
+    private let features: [(icon: String, text: String)] = [
+        ("paintbrush.fill", "20+ aesthetic widgets for your home screen"),
+        ("sparkles", "5,000+ cute icons & symbols to mix and match"),
+        ("wand.and.stars", "Build your dream interface, your way"),
+        ("paintpalette.fill", "Unlock every theme, color & style"),
+        ("infinity", "Unlimited customization — forever"),
+    ]
+
     var body: some View {
-        ZStack {
-            VStack(spacing: 20) {
-                VStack(spacing: 16) {
-                    Spacer()
-                        .frame(height: 75)
+        Group {
+            if purchaseSucceeded {
+                PremiumUnlockedView(onContinue: { dismiss() })
+                    .transition(.opacity.combined(with: .scale(scale: 0.97)))
+            } else {
+                paywallBody
+            }
+        }
+    }
 
-                    VStack(spacing: 8) {
-                        Text("Setup the Cutest Control!!\n૮꒰ ˶• ༝ •˶꒱ა 🩷")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                            .multilineTextAlignment(.center)
+    private var paywallBody: some View {
+        ZStack(alignment: .topTrailing) {
+            ScrollView {
+                VStack(spacing: 20) {
+                    // Header
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("Make your phone\nadorable. 🎀")
+                            .font(.system(size: 32, weight: .bold))
+                            .foregroundStyle(.primary)
                             .fixedSize(horizontal: false, vertical: true)
-                    }
 
-                    VStack(alignment: .leading, spacing: 16) {
-                        HStack(spacing: 12) {
-                            Image(systemName: "paintbrush.fill")
-                                .frame(width: 20, height: 20)
-                                .foregroundColor(.pink)
-                            Text("20+ aesthetic widgets")
+                        Text("20+ aesthetic widgets, 5,000+ cute icons — your dream interface, unlocked.")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+
+                        HStack(spacing: 8) {
+                            Image(systemName: "laurel.leading")
                                 .font(.system(size: 18))
-                        }
-
-                        HStack(spacing: 12) {
-                            Image(systemName: "sparkles")
-                                .frame(width: 20, height: 20)
-                                .foregroundColor(.pink)
-                            Text("5,000+ cute icons & symbols")
+                                .foregroundStyle(.pink)
+                            Text("4.8 · Loved by thousands")
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(.secondary)
+                            Image(systemName: "laurel.trailing")
                                 .font(.system(size: 18))
+                                .foregroundStyle(.pink)
                         }
+                        .frame(maxWidth: .infinity, alignment: .center)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 24)
+                    .padding(.top, 20)
 
-                        HStack(spacing: 12) {
-                            Image(systemName: "wand.and.stars")
-                                .frame(width: 20, height: 20)
-                                .foregroundColor(.pink)
-                            Text("Build your dream interface")
-                                .font(.system(size: 18))
+                    // Outcome bullets
+                    VStack(alignment: .leading, spacing: 14) {
+                        ForEach(features, id: \.text) { feature in
+                            HStack(spacing: 14) {
+                                Image(systemName: feature.icon)
+                                    .font(.system(size: 16, weight: .bold))
+                                    .foregroundStyle(.white)
+                                    .frame(width: 36, height: 36)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                            .fill(
+                                                LinearGradient(
+                                                    colors: [.paywallAccent, .paywallAccentDeep],
+                                                    startPoint: .topLeading,
+                                                    endPoint: .bottomTrailing
+                                                )
+                                            )
+                                    )
+
+                                Text(NSLocalizedString(feature.text, comment: ""))
+                                    .font(.subheadline)
+                                    .fontWeight(.medium)
+                                    .foregroundStyle(.primary)
+                                    .fixedSize(horizontal: false, vertical: true)
+
+                                Spacer(minLength: 0)
+                            }
                         }
                     }
-                    .font(.headline)
-                }
-                .padding(.vertical, 16)
-                .padding(.horizontal)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 24)
 
-                Spacer()
-
-                if isTrialEligible {
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(isWeeklySelected ? "Free Trial Enabled" : "Free Trial Disabled")
-                                    .font(.headline)
-                                
-                                Text("Not sure? Try it risk-free")
-                                    .font(.caption)
-                                    .foregroundColor(.pink)
+                    // Packages
+                    VStack(spacing: 12) {
+                        if isLoading {
+                            ForEach(0..<3) { _ in
+                                PurchaseButtonSkeleton()
                             }
-
-                            Spacer()
-
-                            Toggle("", isOn: $isWeeklySelected)
-                                .labelsHidden()
-                                .onChange(of: isWeeklySelected) { newValue in
-                                    selectAppropriatePackage()
+                        } else {
+                            ForEach(packages, id: \.identifier) { package in
+                                PurchaseButton(package: package,
+                                               isSelected: selectedPackage?.identifier == package.identifier) {
+                                    selectPackage(package)
                                 }
-                                .tint(.pink)
-                        }
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
-                    .background(Color(.systemBackground))
-                    .cornerRadius(12)
-                    .padding(.horizontal)
-                }
-
-                VStack(spacing: 16) {
-                    if isLoading {
-                        ForEach(0..<3) { _ in
-                            PurchaseButtonSkeleton()
-                        }
-                    } else {
-                        ForEach(packages, id: \.identifier) { package in
-                            PurchaseButton(package: package,
-                                          isSelected: selectedPackage?.identifier == package.identifier,
-                                          yearlyStrikethroughPrice: yearlyStrikethroughPrice,
-                                          isTrialEligible: isTrialEligible) {
-                                selectPackage(package)
                             }
                         }
                     }
-                }
-                .padding(.horizontal)
+                    .padding(.horizontal, 24)
 
-                Button(action: {
-                    if let package = selectedPackage {
-                        Task {
-                            do {
-                                let result = try await Purchases.shared.purchase(package: package)
-                                if result.customerInfo.entitlements.all["premium"]?.isActive == true {
-                                    premiumManager.isPremium = true
-                                    await ratingManager.requestReview()
-                                    dismiss()
-                                } else {
-                                    print("didnt do anything??")
-                                }
-                            } catch {
-                                print("Purchase failed: \(error)")
-                            }
+                    // Footer links
+                    VStack(spacing: 8) {
+                        HStack(spacing: 4) {
+                            Button("Restore") { restorePurchases() }
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            Text("·").foregroundColor(.secondary)
+                            Button("Privacy") { showingPrivacy = true }
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            Text("·").foregroundColor(.secondary)
+                            Button("Terms") { showingTerms = true }
+                                .font(.caption)
+                                .foregroundColor(.secondary)
                         }
-                    }
-                }) {
-                    HStack {
-                        Text("Try Free for 3 Days 🎀")
-                        Image(systemName: "chevron.right")
-                    }
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(selectedPackage != nil ? Color.pink : Color.gray)
-                    .cornerRadius(12)
-                }
-                .disabled(selectedPackage == nil || isLoading)
-                .padding(.horizontal)
-                .redacted(reason: isLoading ? .placeholder : [])
 
-                HStack(spacing: 4) {
-                    Button("Restore") {
-                        Task {
-                            do {
-                                let customerInfo = try await Purchases.shared.restorePurchases()
-                                print("Purchases restored: \(customerInfo)")
-                                if customerInfo.entitlements.all["premium"]?.isActive == true {
-                                    alertTitle = "Success"
-                                    alertMessage = "Your purchases have been restored!"
-                                    showingAlert = true
-                                    premiumManager.isPremium = true
-                                } else {
-                                    alertTitle = "No Purchases Found"
-                                    alertMessage = "No previous purchases were found to restore."
-                                    showingAlert = true
-                                }
-                            } catch {
-                                print("Restore failed: \(error)")
-                                alertTitle = "Restore Failed"
-                                alertMessage = "Failed to restore purchases. Please try again."
-                                showingAlert = true
-                            }
-                        }
+                        Text("Subscription automatically renews unless auto-renew is turned off at least 24 hours before the end of the current period.")
+                            .font(.system(size: 10))
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 32)
                     }
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-
-                    Text("•")
-                        .foregroundColor(.secondary)
-
-                    Button("Privacy") {
-                        showingPrivacy = true
-                    }
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-
-                    Text("•")
-                        .foregroundColor(.secondary)
-
-                    Button("Terms") {
-                        showingTerms = true
-                    }
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+                    .padding(.bottom, 120)
                 }
             }
-            
-            // Kuromi flying on top of everything
-            ZStack {
-                // Hearts behind kuromi
-                ForEach(sparkles) { sparkle in
-                    Image(systemName: "heart.fill")
-                        .foregroundStyle(
-                            LinearGradient(
-                                colors: [.pink, .pink.opacity(0.6)],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-                        .font(.system(size: 18))
-                        .scaleEffect(sparkle.scale)
-                        .opacity(sparkle.opacity)
-                        .offset(x: sparkle.x, y: sparkle.y)
-                }
-                
-                // Kuromi
-                Image("kuromi3")
-                    .resizable()
-                    .scaledToFit()
-                    .cornerRadius(16)
-                    .frame(width: 110, height: 110)
-                    .scaleEffect(x: isMovingRight ? 1 : -1, y: 1)
-                    .offset(x: sin(waveTime) * 150, y: cos(waveTime * 0.7) * 200)
-                    .onTapGesture {
-                        // Haptic feedback
-                        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-                        impactFeedback.impactOccurred()
-                        
-                        // Speed boost
-                        speedMultiplier = 3.0
-                        sparkleBoost = 5
-                        
-                        // Reset after 2 seconds
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                            speedMultiplier = 1.0
-                            sparkleBoost = 0
-                        }
-                    }
-                    .onAppear {
-                        // Start moving after 0.5 seconds delay
-                        DispatchQueue.main.asyncAfter(deadline: .now()) {
-                            startSinWaveMovement()
-                            createSparkles()
-                        }
-                    }
-            }
 
+            // Dismiss button (progress circle for first 3 seconds)
             if !hardPaywall {
-                VStack {
-                    HStack {
-                        Spacer()
-                        Group {
-                            if !showDismissButton {
-                                Circle()
-                                    .trim(from: 0, to: progress)
-                                    .stroke(style: StrokeStyle(lineWidth: 1.5, lineCap: .butt))
-                                    .foregroundColor(.secondary)
-                                    .frame(width: 24, height: 24)
-                                    .rotationEffect(.degrees(-90))
-                            } else {
-                                Button {
-                                    dismiss()
-                                } label: {
-                                    Image(systemName: "xmark.circle.fill")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 24, height: 24)
-                                        .foregroundColor(.secondary)
-                                }
-                            }
+                Group {
+                    if !showDismissButton {
+                        Circle()
+                            .trim(from: 0, to: progress)
+                            .stroke(style: StrokeStyle(lineWidth: 1.5, lineCap: .butt))
+                            .foregroundColor(.secondary)
+                            .frame(width: 24, height: 24)
+                            .rotationEffect(.degrees(-90))
+                    } else {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image(systemName: "xmark.circle.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 28, height: 28)
+                                .foregroundColor(.secondary)
                         }
-                        .padding()
+                        .buttonStyle(.plain)
                     }
-                    Spacer()
                 }
+                .frame(width: 44, height: 44)
+                .padding(.top, 8)
+                .padding(.trailing, 12)
                 .onAppear {
                     withAnimation(.linear(duration: 3)) {
                         progress = 1
                     }
-                    
                     DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                        withAnimation(.easeIn) {
-                            showDismissButton = true
-                        }
+                        showDismissButton = true
                     }
                 }
             }
         }
-        .background(
-            LinearGradient(
-                gradient: Gradient(colors: [
-                    Color.pink.opacity(0.1),
-                    Color.pink.opacity(0.05)
-                ]),
-                startPoint: .top,
-                endPoint: .bottom
+        .background(Color(.systemBackground))
+        .overlay(alignment: .bottom) {
+            VStack(spacing: 6) {
+                Button(action: purchase) {
+                    HStack {
+                        Text(ctaText)
+                        Image(systemName: "chevron.right")
+                    }
+                    .font(.system(size: 19, weight: .semibold))
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 20)
+                    .padding(.horizontal, 16)
+                    .background(
+                        RoundedRectangle(cornerRadius: 26, style: .continuous)
+                            .fill(
+                                selectedPackage != nil
+                                ? AnyShapeStyle(
+                                    LinearGradient(
+                                        colors: [.paywallAccent, .paywallAccentDeep],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                )
+                                : AnyShapeStyle(Color.gray)
+                            )
+                    )
+                }
+                .disabled(selectedPackage == nil || isLoading)
+
+                HStack(spacing: 5) {
+                    Image(systemName: "checkmark")
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundStyle(.green)
+                    trustFooter
+                }
+                .font(.system(size: 13))
+                .foregroundStyle(.secondary)
+            }
+            .padding(.horizontal, 24)
+            .padding(.bottom, 16)
+            .background(
+                LinearGradient(
+                    colors: [Color(.systemBackground).opacity(0), Color(.systemBackground)],
+                    startPoint: .top,
+                    endPoint: .center
+                )
             )
-            .ignoresSafeArea()
-        )
+        }
         .onAppear {
             loadPackages()
         }
-        .sheet(isPresented: $showingPrivacy) { // fix here
+        .sheet(isPresented: $showingPrivacy) {
             SafariView(url: URL(string: "https://turkerkizilcik.com/control/privacy-policy")!)
         }
         .sheet(isPresented: $showingTerms) {
@@ -332,248 +254,253 @@ struct CustomPaywallView: View {
         }
         .alert(alertTitle, isPresented: $showingAlert) {
             Button("OK", role: .cancel) {
-                // Only dismiss if restore was successful
-                if alertTitle == "Success" {
-                    dismiss()
-                }
+                if dismissOnAlertOK { dismiss() }
             }
         } message: {
             Text(alertMessage)
         }
     }
 
-    private func loadPackages() {
-        isLoading = true
+    // MARK: - Actions
+
+    private var ctaText: String {
+        guard let package = selectedPackage else { return String(localized: "Continue") }
+        if Self.freeTrialDays(for: package) != nil {
+            return String(localized: "Start Free Trial 🎀")
+        }
+        return String(localized: "Unlock Cute Control 🎀")
+    }
+
+    private var trustFooter: Text {
+        if let package = selectedPackage, Self.freeTrialDays(for: package) != nil {
+            return Text("No payment due now.").fontWeight(.semibold).foregroundColor(.primary) + Text(" Cancel anytime.")
+        }
+        return Text("Cancel anytime. Secured by App Store.")
+    }
+
+    /// Free-trial length in days when the package's intro offer is a free trial.
+    /// Returns nil if there's no intro offer or it isn't a free trial.
+    static func freeTrialDays(for package: Package) -> Int? {
+        guard let intro = package.storeProduct.introductoryDiscount,
+              intro.paymentMode == .freeTrial else { return nil }
+        let period = intro.subscriptionPeriod
+        switch period.unit {
+        case .day: return period.value
+        case .week: return period.value * 7
+        case .month: return period.value * 30
+        case .year: return period.value * 365
+        }
+    }
+
+    private func purchase() {
+        guard let package = selectedPackage else { return }
+
         Task {
             do {
-                let offerings = try await Purchases.shared.offerings()
-                if let offering = offerings.offering(identifier: "premium") {
-                    // Check trial eligibility for all packages
-                    let eligibility = try await Purchases.shared.checkTrialOrIntroDiscountEligibility(
-                        productIdentifiers: offering.availablePackages.map { $0.storeProduct.productIdentifier }
-                    )
-                    
-                    DispatchQueue.main.async {
-                        // Debug logging
-                        print("DEBUG: All available packages:")
-                        offering.availablePackages.forEach { package in
-                            if let period = package.storeProduct.subscriptionPeriod {
-                                print("DEBUG: Found package - ID: \(package.identifier)")
-                                print("DEBUG: Period Unit: \(period.unit)")
-                                print("DEBUG: Price: \(package.storeProduct.price)")
-                                print("---")
-                            }
-                        }
-                        
-                        // Filter out monthly packages and sort (yearly first, then weekly)
-                        self.packages = offering.availablePackages
-                            .filter { $0.storeProduct.subscriptionPeriod?.unit != .month }
-                            .sorted { first, second in
-                                let firstPriority = first.storeProduct.subscriptionPeriod?.unit == .year ? 0 : 1
-                                let secondPriority = second.storeProduct.subscriptionPeriod?.unit == .year ? 0 : 1
-                                return firstPriority < secondPriority
-                            }
-                        
-                        print("DEBUG: Total packages count (after filtering): \(self.packages.count)")
-                        
-                        // Check eligibility for weekly package
-                        if let weeklyPackage = self.packages.first(where: { $0.storeProduct.subscriptionPeriod?.unit == .week }) {
-                            print(eligibility[weeklyPackage.storeProduct.productIdentifier]?.status.description)
-                            let actualEligibility = eligibility[weeklyPackage.storeProduct.productIdentifier]?.status == .eligible
-                            self.isTrialEligible = self.forceShowTrial || actualEligibility
-                            print("Is trial eligible: \(self.isTrialEligible) (forced: \(self.forceShowTrial))")
-                            
-                            // Calculate yearly strikethrough price
-                            let weeklyPrice = NSDecimalNumber(decimal: weeklyPackage.storeProduct.price).doubleValue
-                            let calculatedYearlyPrice = weeklyPrice * 52.0
-                            let currencySymbol = weeklyPackage.storeProduct.localizedPriceString.first ?? "$"
-                            self.yearlyStrikethroughPrice = "\(currencySymbol)\(String(format: "%.2f", calculatedYearlyPrice))"
-                        }
-                        
-                        // Select weekly by default
-                        self.selectedPackage = self.packages.first { package in
-                            package.storeProduct.subscriptionPeriod?.unit == .week
-                        }
-                        self.isWeeklySelected = true
-                        self.isLoading = false
+                let result = try await Purchases.shared.purchase(package: package)
+                if result.userCancelled {
+                    return
+                } else if result.customerInfo.entitlements.all["premium"]?.isActive == true {
+                    premiumManager.isPremium = true
+                    await ratingManager.requestReview()
+                    withAnimation(.easeOut(duration: 0.4)) {
+                        purchaseSucceeded = true
                     }
                 }
             } catch {
-                print("Error loading packages: \(error)")
-                DispatchQueue.main.async {
-                    self.isLoading = false
+                print("Purchase failed: \(error)")
+            }
+        }
+    }
+
+    private func restorePurchases() {
+        Task {
+            do {
+                let info = try await Purchases.shared.restorePurchases()
+                if info.entitlements.all["premium"]?.isActive == true {
+                    alertTitle = String(localized: "Success")
+                    alertMessage = String(localized: "Your purchases have been restored!")
+                    dismissOnAlertOK = true
+                    premiumManager.isPremium = true
+                } else {
+                    alertTitle = String(localized: "No Purchases Found")
+                    alertMessage = String(localized: "No previous purchases were found to restore.")
+                    dismissOnAlertOK = false
                 }
+                showingAlert = true
+            } catch {
+                alertTitle = String(localized: "Restore Failed")
+                alertMessage = String(localized: "Failed to restore purchases. Please try again.")
+                dismissOnAlertOK = false
+                showingAlert = true
             }
         }
     }
 
     private func selectPackage(_ package: Package) {
         selectedPackage = package
-        isWeeklySelected = package.storeProduct.subscriptionPeriod?.unit == .week
     }
 
-    private func selectAppropriatePackage() {
-        if isWeeklySelected {
-            selectedPackage = packages.first { package in
-                package.storeProduct.subscriptionPeriod?.unit == .week
-            }
-        } else {
-            // Keep the currently selected package if it's not weekly
-            if let currentPackage = selectedPackage,
-               currentPackage.storeProduct.subscriptionPeriod?.unit != .week {
-                // Keep the current selection
-            } else {
-                // Default to yearly since we removed monthly
-                selectedPackage = packages.first { package in
-                    package.storeProduct.subscriptionPeriod?.unit == .year
-                }
-            }
-        }
-    }
-    
-    private func startSinWaveMovement() {
-        Timer.scheduledTimer(withTimeInterval: 0.02, repeats: true) { _ in
-            waveTime += 0.02 * speedMultiplier
-            
-            // Calculate current and previous X positions
-            let currentX = sin(waveTime) * 150
-            
-            // Determine direction and flip image accordingly
-            if currentX > lastX {
-                isMovingRight = true
-            } else if currentX < lastX {
-                isMovingRight = false
-            }
-            
-            lastX = currentX
-        }
-    }
-    
-    private func createSparkles() {
-        Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { _ in
-            // Add sparkle exactly where kuromi is
-            let currentX = sin(waveTime) * 150
-            let currentY = cos(waveTime * 0.7) * 200
-            
-            // Create more sparkles when boosted
-            let sparkleCount = 1 + sparkleBoost
-            for _ in 0..<sparkleCount {
-                let newSparkle = SparkleEffect(
-                    x: currentX + CGFloat.random(in: -15...15),
-                    y: currentY + CGFloat.random(in: -15...15)
-                )
-                sparkles.append(newSparkle)
-            }
-            
-            // Animate fade out for the new sparkles
-            let newSparkles = sparkles.suffix(sparkleCount)
-            for sparkle in newSparkles {
-                withAnimation(.easeOut(duration: 2.0)) {
-                    if let index = sparkles.firstIndex(where: { $0.id == sparkle.id }) {
-                        sparkles[index].opacity = 0
-                        sparkles[index].scale = 0.2
+    // MARK: - Load Packages
+
+    private func loadPackages() {
+        isLoading = true
+        Task {
+            do {
+                let offerings = try await Purchases.shared.offerings()
+                if let offering = offerings.offering(identifier: "premium") ?? offerings.current {
+                    await MainActor.run {
+                        self.packages = offering.availablePackages
+                            .filter { $0.storeProduct.subscriptionPeriod != nil }
+                            .sorted { Self.sortPriority(for: $0) < Self.sortPriority(for: $1) }
+
+                        if let yearly = self.packages.first(where: { $0.storeProduct.subscriptionPeriod?.unit == .year }) {
+                            self.selectedPackage = yearly
+                        } else if let weekly = self.packages.first(where: { $0.storeProduct.subscriptionPeriod?.unit == .week }) {
+                            self.selectedPackage = weekly
+                        } else {
+                            self.selectedPackage = self.packages.first
+                        }
+
+                        self.isLoading = false
                     }
                 }
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                    sparkles.removeAll { $0.id == sparkle.id }
-                }
+            } catch {
+                print("Error loading packages: \(error)")
+                await MainActor.run { self.isLoading = false }
             }
-            
-            // Keep trail length reasonable
-            if sparkles.count > 10 {
-                sparkles.removeFirst()
-            }
+        }
+    }
+
+    private static func sortPriority(for package: Package) -> Int {
+        switch package.storeProduct.subscriptionPeriod?.unit {
+        case .year: return 0
+        case .week: return 1
+        case .month: return 2
+        default: return 3
         }
     }
 }
 
+// MARK: - Purchase Button
+
 struct PurchaseButton: View {
     let package: Package
     let isSelected: Bool
-    let yearlyStrikethroughPrice: String
-    let isTrialEligible: Bool
     let action: () -> Void
-    
-    private var savingsPercentage: Int? {
-        guard package.storeProduct.subscriptionPeriod?.unit == .year else { 
-            return nil 
+
+    private var isYearly: Bool {
+        package.storeProduct.subscriptionPeriod?.unit == .year
+    }
+
+    private var isWeekly: Bool {
+        package.storeProduct.subscriptionPeriod?.unit == .week
+    }
+
+    private var trialDays: Int? {
+        CustomPaywallView.freeTrialDays(for: package)
+    }
+
+    private var yearlySubtitle: String {
+        guard let days = trialDays else {
+            return String(localized: "Best value — save the most")
         }
-        
-        let yearlyPrice = NSDecimalNumber(decimal: package.storeProduct.price).doubleValue
-        
-        // Remove any currency symbols and whitespace
-        let cleanedPrice = yearlyStrikethroughPrice.replacingOccurrences(of: "[^0-9.]", with: "", options: .regularExpression)
-        let calculatedYearlyPrice = Double(cleanedPrice) ?? 0
-        
-        if calculatedYearlyPrice > 0 {
-            let savings = Int(((calculatedYearlyPrice - yearlyPrice) / calculatedYearlyPrice) * 100)
-            return savings
-        }
-        return nil
+        let price = package.storeProduct.localizedPriceString
+        return days == 1
+            ? String(localized: "1 day free, then \(price)/year")
+            : String(localized: "\(days) days free, then \(price)/year")
+    }
+
+    private var weeklySubtitle: String? {
+        guard isWeekly, let days = trialDays else { return nil }
+        let price = package.storeProduct.localizedPriceString
+        return days == 1
+            ? String(localized: "1 day free, then \(price)/week")
+            : String(localized: "\(days) days free, then \(price)/week")
+    }
+
+    /// Approximate weekly cost of the yearly plan, formatted in the store's currency.
+    /// Used as an at-a-glance comparison only — the actual billing cadence is yearly.
+    private var weeklyEquivalent: String? {
+        guard isYearly,
+              let formatter = package.storeProduct.priceFormatter else { return nil }
+        let yearly = (package.storeProduct.price as NSDecimalNumber).doubleValue
+        let perWeek = yearly / 52.0
+        return formatter.string(from: NSNumber(value: perWeek))
     }
 
     var body: some View {
-        ZStack(alignment: .topTrailing) {
-            Button(action: action) {
-                HStack {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(package.storeProduct.subscriptionPeriod?.unit == .week && isTrialEligible ? "3-Day Free Trial" : 
-                             package.storeProduct.subscriptionPeriod?.unit == .week ? "Weekly Plan" :
-                             package.storeProduct.subscriptionPeriod?.unit == .year ? "Yearly Plan" : "Premium Access")
-                            .font(.headline)
-                            .foregroundColor(.primary)
+        Button(action: action) {
+            HStack(spacing: 12) {
+                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                    .foregroundColor(isSelected ? .white : .secondary)
+                    .font(.title3)
 
-                        if package.storeProduct.subscriptionPeriod?.unit == .week {
-                            Text(isTrialEligible ? 
-                                 "then \(package.storeProduct.localizedPriceString)/week" : 
-                                 "\(package.storeProduct.localizedPriceString)/week")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                        } else {
-                            (Text(yearlyStrikethroughPrice).strikethrough() + Text(" \(package.storeProduct.localizedPriceString)/year"))
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                        }
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(packageTitle)
+                        .font(.headline)
+                        .foregroundColor(isSelected ? .white : .primary)
+
+                    if isYearly {
+                        Text(yearlySubtitle)
+                            .font(.caption)
+                            .foregroundColor(isSelected ? Color.white.opacity(0.85) : .secondary)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.85)
+                    } else if let subtitle = weeklySubtitle {
+                        Text(subtitle)
+                            .font(.caption)
+                            .foregroundColor(isSelected ? Color.white.opacity(0.85) : .secondary)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.85)
                     }
-
-                    Spacer()
-                    
-                    if let savings = savingsPercentage {
-                        Text("SAVE \(savings)%")
-                            .font(.system(size: 14, weight: .bold))
-                            .foregroundColor(.pink)
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 6)
-                            .background(Color.pink.opacity(0.15))
-                            .cornerRadius(8)
-                            .padding(.trailing, 8)
-                    } else if package.storeProduct.subscriptionPeriod?.unit == .month {
-                        Text("POPULAR ✨")
-                            .font(.system(size: 14, weight: .bold))
-                            .foregroundColor(.pink)
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 6)
-                            .background(Color.pink.opacity(0.15))
-                            .cornerRadius(8)
-                            .padding(.trailing, 8)
-                    }
-
-                    Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                        .foregroundColor(isSelected ? .pink : .secondary)
-                        .font(.title3)
-                        .padding(.leading, 8)
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-                .background(Color(.systemBackground))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(isSelected ? Color.pink : Color(.systemGray5), lineWidth: isSelected ? 5 : 5)
-                )
-                .cornerRadius(12)
+
+                Spacer()
+
+                VStack(alignment: .trailing, spacing: 1) {
+                    Text(packagePrice)
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .foregroundColor(isSelected ? .white : .primary)
+
+                    if isYearly, let perWeek = weeklyEquivalent {
+                        Text("\(perWeek)/week")
+                            .font(.system(size: 11))
+                            .foregroundColor(isSelected ? Color.white.opacity(0.7) : .secondary)
+                    }
+                }
             }
-            .buttonStyle(PlainButtonStyle())
+            .frame(height: 64)
+            .padding(.horizontal, 16)
+            .background(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .fill(isSelected ? Color(red: 0.87, green: 0.20, blue: 0.52) : Color(.secondarySystemBackground))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .stroke(isSelected ? Color.white.opacity(0.5) : Color(.systemGray4), lineWidth: isSelected ? 2 : 1)
+            )
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+
+    private var packageTitle: String {
+        switch package.storeProduct.subscriptionPeriod?.unit {
+        case .week: return String(localized: "Weekly")
+        case .year: return String(localized: "Yearly")
+        case .month: return String(localized: "Monthly")
+        default: return String(localized: "Premium")
+        }
+    }
+
+    private var packagePrice: String {
+        let price = package.storeProduct.localizedPriceString
+        switch package.storeProduct.subscriptionPeriod?.unit {
+        case .week: return String(localized: "\(price)/week")
+        case .month: return String(localized: "\(price)/month")
+        case .year: return String(localized: "\(price)/year")
+        default: return price
         }
     }
 }
@@ -581,43 +508,96 @@ struct PurchaseButton: View {
 struct PurchaseButtonSkeleton: View {
     var body: some View {
         HStack {
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Package Name")
-                    .font(.headline)
-                    .foregroundColor(.primary)
-
-                Text("Price information")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-            }
-
-            Spacer()
-
             Circle()
                 .frame(width: 24, height: 24)
+            Text("Package Name")
+                .font(.headline)
+                .foregroundColor(.primary)
+            Spacer()
+            Text("$0.00/wk")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
         }
+        .frame(height: 64)
         .padding(.horizontal, 16)
-        .padding(.vertical, 12)
-        .background(Color(.systemBackground))
-        .cornerRadius(12)
+        .background(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(Color(.secondarySystemBackground))
+        )
         .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(Color(.systemGray5), lineWidth: 5)
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .stroke(Color(.systemGray4), lineWidth: 1)
         )
         .redacted(reason: .placeholder)
     }
 }
 
-private extension SubscriptionPeriod {
-    var periodTitle: String {
-        switch (unit, value) {
-        case (.week, 1): return "3-Day Trial"
-        case (.month, 1): return "Monthly Plan"
-        case (.year, 1): return "Yearly Plan"
-        default: return "\(value) \(unit)"
+// MARK: - Premium Unlocked
+
+struct PremiumUnlockedView: View {
+    let onContinue: () -> Void
+    @State private var appeared = false
+
+    var body: some View {
+        VStack(spacing: 24) {
+            Spacer()
+
+            Image(systemName: "checkmark.seal.fill")
+                .font(.system(size: 84))
+                .foregroundStyle(
+                    LinearGradient(
+                        colors: [.paywallAccent, .paywallAccentDeep],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .scaleEffect(appeared ? 1 : 0.6)
+                .opacity(appeared ? 1 : 0)
+
+            VStack(spacing: 8) {
+                Text("You're all set! 🎀")
+                    .font(.system(size: 28, weight: .bold))
+                Text("Every cute widget, icon & theme is now unlocked. Go make your phone adorable.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .padding(.horizontal, 32)
+
+            Spacer()
+
+            Button(action: onContinue) {
+                Text("Start Customizing")
+                    .font(.system(size: 19, weight: .semibold))
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 20)
+                    .background(
+                        RoundedRectangle(cornerRadius: 26, style: .continuous)
+                            .fill(
+                                LinearGradient(
+                                    colors: [.paywallAccent, .paywallAccentDeep],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            )
+                    )
+            }
+            .padding(.horizontal, 24)
+            .padding(.bottom, 24)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(.systemBackground))
+        .onAppear {
+            withAnimation(.spring(response: 0.5, dampingFraction: 0.6)) {
+                appeared = true
+            }
         }
     }
 }
+
+// MARK: - Safari View
 
 struct SafariView: UIViewControllerRepresentable {
     let url: URL
@@ -632,5 +612,4 @@ struct SafariView: UIViewControllerRepresentable {
 
 #Preview {
     CustomPaywallView()
-        .environment(\.locale, Locale(identifier: "de"))
 }

@@ -6,6 +6,7 @@
 //
 
 enum CategoryType: CaseIterable {
+    case kaomoji
     case communication
     case weather
     case maps
@@ -36,6 +37,42 @@ enum CategoryType: CaseIterable {
 
     var symbols: [String] {
         switch self {
+        case .kaomoji:
+            return [
+                // Happy
+                "(◕‿◕)", "(＾▽＾)", "(｡◕‿◕｡)", "(◕ᴗ◕✿)", "＼(^o^)／", "(≧▽≦)", "(*^ω^*)",
+                "(´｡• ω •｡`)", "(ﾉ◕ヮ◕)ﾉ", "(☆▽☆)", "(✿◠‿◠)", "ヽ(・∀・)ﾉ", "(◠‿◠)", "(＾◡＾)",
+                "(•‿•)", "(＾ｖ＾)", "(ᵔ◡ᵔ)", "(っ◔◡◔)っ", "ヽ(>∀<☆)ノ", "o(≧▽≦)o", "(＾∇＾)",
+                "(*≧ω≦*)", "(☆ω☆)", "(ノ^∇^)",
+                // Love
+                "(♥ω♥)", "(｡♥‿♥｡)", "(◍•ᴗ•◍)❤", "♡(◡‿◡)", "(♡°▽°♡)", "(*♡∀♡)", "(◕‿◕)♡",
+                "(´♡‿♡`)", "♡＼(￣▽￣)／♡", "(♡˙︶˙♡)", "(❤ω❤)", "(づ￣ ³￣)づ", "(♥‿♥)", "(˘∀˘)/(μ‿μ)",
+                // Shy & cute
+                "(⁄ ⁄•⁄ω⁄•⁄ ⁄)", "(//▽//)", "(„• ֊ •„)", "(｡•́‿•̀｡)", "(˶ᵔ ᵕ ᵔ˶)", "૮ ˶ᵔ ᵕ ᵔ˶ ა",
+                "(˶˃ ᵕ ˂˶)", "꒰ ˶• ༝ •˶꒱", "(◞‸◟)", "(｡•̀ᴗ-)✧", "(＾• ω •＾)", "(´• ω •`)",
+                // Sad & crying
+                "(╥﹏╥)", "(｡•́︿•̀｡)", "(っ˘̩╭╮˘̩)っ", "(T_T)", "(ಥ﹏ಥ)", "(ノ_<。)", "(´；ω；`)",
+                "(╯︵╰,)", "(;﹏;)", "(；△；)", "(◞‸◟ဂ)",
+                // Angry
+                "(╬ Ò﹏Ó)", "(＃｀Д´)", "ヽ(｀⌒´メ)ノ", "(ノಠ益ಠ)ノ彡┻━┻", "٩(╬ʘ益ʘ╬)۶", "(¬､¬)",
+                "凸(￣ヘ￣)", "(҂` ﹏ ´)", "＼(｀0´)／", "(╬｀益´)",
+                // Surprised
+                "(⊙_⊙)", "(ﾟοﾟ)", "(☉_☉)", "(○o○)", "Σ(°△°|||)", "(⊙﹏⊙)", "(ﾟдﾟ；)", "Σ(￣□￣ )",
+                // Animals
+                "ʕ•ᴥ•ʔ", "(=^･ω･^=)", "/ᐠ｡ꞈ｡ᐟ＼", "ฅ^•ﻌ•^ฅ", "(•ᴥ•)", "૮ ˙Ⱉ˙ ა", "ʕっ•ᴥ•ʔっ",
+                "(=｀ω´=)", "(=^‥^=)", "(ↀᴥↀ)", "ᘛⁱ‸ⁱᘚ",
+                // Cool & playful
+                "¯\\_(ツ)_/¯", "┐(´∀｀)┌", "╮(╯▽╰)╭", "( ͡° ͜ʖ ͡°)", "(ง'̀-'́)ง", "ᕦ(ò_óˇ)ᕤ",
+                "⊂(◉‿◉)つ", "(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧", "♪(┌・。・)┌", "(~˘▾˘)~", "(▰˘◡˘▰)", "乁( ◔ ౪◔)ㄏ",
+                "(^_~)", "(^_-)≦", "( ﾟ▽ﾟ)/",
+                // Sleepy
+                "(˘ω˘)", "(｡-ω-)zzz", "(-_-) zzz", "(∪｡∪)｡｡｡zzz", "(￣o￣) zzz",
+                // Celebrate & sparkle
+                "♪(´▽｀)", "ヽ(o^▽^o)ノ", "＼(≧▽≦)／", "(((o(°▽°)o)))", "٩(◕‿◕)۶", "┌(★ｏ☆)┘",
+                "☆*:.｡.o(≧▽≦)o.｡.:*☆", "(✯◡✯)", "(★^O^★)", "(◠‿◠✿)",
+                // Table flip
+                "(╯°□°)╯︵ ┻━┻", "┬─┬ノ(º_ºノ)"
+            ]
         case .communication:
             return ["arrow.down.left.video", "arrow.down.left.video.fill", "arrow.up.right.video", "arrow.up.right.video.fill", "bubble.left", "bubble.left.and.bubble.right", "bubble.left.and.bubble.right.fill", "bubble.left.fill", "bubble.middle.bottom", "bubble.middle.bottom.fill", "bubble.middle.top", "bubble.middle.top.fill", "bubble.right", "bubble.right.fill", "captions.bubble", "captions.bubble.fill", "envelope", "envelope.badge", "envelope.badge.fill", "envelope.circle", "envelope.circle.fill", "envelope.fill", "envelope.open", "envelope.open.fill", "exclamationmark.bubble", "exclamationmark.bubble.fill", "message", "message.circle", "message.circle.fill", "message.fill", "mic", "mic.circle", "mic.circle.fill", "mic.fill", "mic.slash", "mic.slash.fill", "phone", "phone.arrow.down.left", "phone.arrow.right", "phone.arrow.up.right", "phone.badge.plus", "phone.circle", "phone.circle.fill", "phone.down", "phone.down.circle", "phone.down.circle.fill", "phone.down.fill", "phone.fill", "phone.fill.badge.plus", "plus.bubble", "plus.bubble.fill", "questionmark.video", "questionmark.video.fill", "quote.bubble", "quote.bubble.fill", "recordingtape", "teletype", "teletype.answer", "text.bubble", "text.bubble.fill", "video", "video.badge.plus", "video.circle", "video.circle.fill", "video.fill", "video.slash", "video.slash.fill", "waveform", "waveform.circle", "waveform.circle.fill", "arrow.up.message", "arrow.up.message.fill", "ellipsis.bubble", "ellipsis.bubble.fill", "envelope.arrow.triangle.branch", "envelope.arrow.triangle.branch.fill", "phone.connection", "plus.message", "plus.message.fill", "questionmark.video.ar", "questionmark.video.fill.ar", "quote.bubble.fill.rtl", "quote.bubble.rtl", "teletype.circle", "teletype.circle.fill", "text.bubble.fill.rtl", "text.bubble.rtl", "video.badge.checkmark", "video.fill.badge.checkmark", "video.fill.badge.plus", "character.bubble", "character.bubble.ar", "character.bubble.fill", "character.bubble.fill.ar", "character.bubble.fill.he", "character.bubble.he", "bubble.left.and.exclamationmark.bubble.right", "bubble.left.and.exclamationmark.bubble.right.fill", "bubble.left.circle", "bubble.left.circle.fill", "bubble.right.circle", "bubble.right.circle.fill", "character.bubble.fill.hi", "character.bubble.fill.ja", "character.bubble.fill.ko", "character.bubble.fill.th", "character.bubble.hi", "character.bubble.ja", "character.bubble.ko", "character.bubble.th", "checkmark.bubble", "checkmark.bubble.fill", "ellipsis.vertical.bubble", "ellipsis.vertical.bubble.fill", "exclamationmark.bubble.circle", "exclamationmark.bubble.circle.fill", "mic.badge.plus", "mic.fill.badge.plus", "mic.slash.circle", "mic.slash.circle.fill", "mic.square", "mic.square.fill", "quote.closing", "quote.opening", "star.bubble", "star.bubble.fill", "teletype.answer.circle", "teletype.answer.circle.fill", "video.badge.ellipsis", "video.fill.badge.ellipsis", "video.square", "video.square.fill", "waveform.badge.exclamationmark", "waveform.badge.minus", "waveform.badge.plus", "arrow.down.message", "arrow.down.message.fill", "checkmark.message", "checkmark.message.fill", "deskview", "deskview.fill", "ellipsis.message", "ellipsis.message.fill", "envelope.open.badge.clock", "info.bubble", "info.bubble.fill", "message.badge", "message.badge.circle", "message.badge.circle.fill", "message.badge.circle.fill.rtl", "message.badge.circle.rtl", "message.badge.fill", "message.badge.fill.rtl", "message.badge.filled.fill", "message.badge.filled.fill.rtl", "message.badge.rtl", "mic.and.signal.meter", "mic.and.signal.meter.fill", "mic.badge.xmark", "mic.fill.badge.xmark", "phone.arrow.down.left.fill", "phone.arrow.right.fill", "phone.arrow.up.right.circle", "phone.arrow.up.right.circle.fill", "phone.arrow.up.right.fill", "phone.badge.checkmark", "phone.connection.fill", "phone.down.waves.left.and.right", "phone.fill.badge.checkmark", "questionmark.bubble", "questionmark.bubble.ar", "questionmark.bubble.fill", "questionmark.bubble.fill.ar", "recordingtape.circle", "recordingtape.circle.fill", "waveform.slash", "bubble", "bubble.circle", "bubble.circle.fill", "bubble.fill", "bubble.left.and.text.bubble.right", "bubble.left.and.text.bubble.right.fill", "checkmark.bubble.fill.rtl", "checkmark.bubble.rtl", "envelope.badge.person.crop", "envelope.badge.person.crop.fill", "field.of.view.ultrawide", "field.of.view.ultrawide.fill", "field.of.view.wide", "field.of.view.wide.fill", "info.bubble.fill.rtl", "info.bubble.rtl", "message.badge.waveform", "message.badge.waveform.fill", "person.bubble", "person.bubble.fill", "phone.badge.waveform", "phone.badge.waveform.fill", "phone.bubble", "phone.bubble.fill", "phone.bubble.fill.rtl", "phone.bubble.rtl", "rectangle.3.group.bubble", "rectangle.3.group.bubble.fill", "speaker.wave.2.bubble", "speaker.wave.2.bubble.fill", "speaker.wave.2.bubble.fill.rtl", "speaker.wave.2.bubble.rtl", "video.badge.waveform", "video.badge.waveform.fill", "video.bubble", "video.bubble.fill", "video.bubble.fill.rtl", "video.bubble.rtl", "video.slash.circle", "video.slash.circle.fill", "waveform.and.person.filled", "waveform.badge.magnifyingglass", "waveform.badge.mic"]
         case .weather:
@@ -95,6 +132,8 @@ enum CategoryType: CaseIterable {
 
     var description: String {
         switch self {
+        case .kaomoji:
+            return "Kaomoji ꒰ ˶• ༝ •˶꒱"
         case .communication:
             return "Communication"
         case .weather:

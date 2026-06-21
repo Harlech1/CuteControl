@@ -19,7 +19,7 @@ struct Cute_ControlApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ControlCenterView()
+            RootView()
                 .environmentObject(premiumManager)
         }
     }
